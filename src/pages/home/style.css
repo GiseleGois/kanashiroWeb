@@ -18,10 +18,6 @@ th {
   text-align: left;
 }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
 tr:hover {
   background-color: #ddd;
 }
@@ -33,4 +29,8 @@ tr:hover {
 
 .table-container {
   width: 48%;
+}
+
+.yellow-row {
+  background-color: yellow;
 }

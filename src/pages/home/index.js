@@ -27,29 +27,28 @@ function Home() {
     });
   }, []);
 
-  // iterar usuarios na tabela
-  const usernames = [...new Set(orders.map(order => order.userFullName))];
+  const userFullNames = [...new Set(orders.map(order => order.userFullName))];
 
   return (
     <div style={{ display: 'flex' }}>
-      <table>
+      <table className="table">
         <thead>
           <tr>
             <th>Descrição</th>
-            {usernames.map(username => (
-              <th key={username}>{username}</th>
+            {userFullNames.map(userFullName => (
+              <th key={userFullName}>{userFullName}</th>
             ))}
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
           {products.map((product) => (
-            <tr key={product.id}>
+            <tr key={product.id} className={product.type === 'D' ? 'yellow-row' : ''}>
               <td>{product.name}</td>
-              {usernames.map(userFullName => (
+              {userFullNames.map(userFullName => (
                 <td key={userFullName}>
                   {orders.reduce((total, order) => {
                     const orderItem = order.items.find(item => item.productId === product.id);
-                    console.log(orderItem)
                     if (orderItem && order.userFullName === userFullName && product.name === orderItem.product) {
                       total += orderItem.quantity;
                     }
@@ -57,9 +56,19 @@ function Home() {
                   }, 0)}
                 </td>
               ))}
+              <td>
+                {orders.reduce((total, order) => {
+                  const orderItem = order.items.find(item => item.productId === product.id);
+                  if (orderItem && product.name === orderItem.product) {
+                    total += orderItem.quantity;
+                  }
+                  return total;
+                }, 0)}
+              </td>
             </tr>
           ))}
         </tbody>
+
       </table>
     </div>
   );
