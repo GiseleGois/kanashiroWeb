@@ -5,6 +5,8 @@ import './style.css';
 function Home() {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   useEffect(() => {
     db.collection('products').onSnapshot((snapshot) => {
@@ -18,13 +20,28 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    db.collection('orders').onSnapshot((snapshot) => {
-      const ordersData = [];
-      snapshot.forEach((doc) => {
-        ordersData.push({ id: doc.id, ...doc.data() });
+    const startTime = new Date();
+    startTime.setDate(startTime.getDate() - 1);
+    startTime.setHours(14, 0, 0, 0);
+
+    const endTime = new Date();
+    endTime.setHours(3, 59, 0, 0);
+
+    setStartDate(startTime);
+    setEndDate(endTime);
+
+    const unsubscribe = db.collection('orders')
+      .where('date', '>=', startTime)
+      .where('date', '<', endTime)
+      .onSnapshot((snapshot) => {
+        const ordersData = [];
+        snapshot.forEach((doc) => {
+          ordersData.push({ id: doc.id, ...doc.data() });
+        });
+        setOrders(ordersData);
       });
-      setOrders(ordersData);
-    });
+
+    return () => unsubscribe();
   }, []);
 
   const userFullNames = [...new Set(orders.map(order => order.userFullName))];
