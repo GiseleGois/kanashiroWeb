@@ -44,7 +44,7 @@ function Home() {
     return () => unsubscribe();
   }, []);
 
-  const userFullNames = [...new Set(orders.map(order => `${order.userFullName} ${order.local}`))];
+  const userFullNames = [...new Set(orders.map(order => order.userFullName))];
 
   return (
     <div style={{ display: 'flex' }}>
