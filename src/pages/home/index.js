@@ -1,92 +1,154 @@
-import React, { useState, useEffect } from 'react';
-import { db } from '../../firebase';
+import React, { useEffect, useRef } from 'react';
+import { Table, Package, Edit, Clipboard, Archive, X, Mail, Phone, User } from 'react-feather';
+import { useHistory } from 'react-router-dom';
+import { auth } from '../../firebase';
 import './style.css';
 
 function Home() {
-  const [products, setProducts] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const history = useHistory();
+  const servicosRef = useRef(null);
 
   useEffect(() => {
-    db.collection('products').onSnapshot((snapshot) => {
-      const productsData = [];
-      snapshot.forEach((doc) => {
-        productsData.push({ id: doc.id, ...doc.data() });
-      });
-      productsData.sort((a, b) => a.priority - b.priority);
-      setProducts(productsData);
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+      if (!user) {
+        history.push('/');
+      }
     });
-  }, []);
 
-  useEffect(() => {
-    const startTime = new Date();
-    startTime.setDate(startTime.getDate() - 1);
-    startTime.setHours(14, 0, 0, 0);
+    return () => unsubscribeAuth();
+  }, [history]);
 
-    const endTime = new Date();
-    endTime.setHours(3, 59, 0, 0);
+  const handleScroll = (e) => {
+    e.preventDefault();
+    const target = servicosRef.current;
+    target.scrollIntoView({ behavior: 'smooth' });
+  };
 
-    setStartDate(startTime);
-    setEndDate(endTime);
+  const handleLogout = () => {
+    auth.signOut().then(() => {
+      history.push('/');
+    });
+  };
 
-    const unsubscribe = db.collection('orders')
-      .where('date', '>=', startTime)
-      .where('date', '<', endTime)
-      .onSnapshot((snapshot) => {
-        const ordersData = [];
-        snapshot.forEach((doc) => {
-          ordersData.push({ id: doc.id, ...doc.data() });
-        });
-        setOrders(ordersData);
-      });
+  const handleOrders = () => {
+    history.push('/orders');
+  };
 
-    return () => unsubscribe();
-  }, []);
+  const handleUpdateOrder = () => {
+    history.push('/update-order');
+  };
 
-  const userFullNames = [...new Set(orders.map(order => order.userFullName))];
+  const handleBilling = () => {
+    history.push('/billing');
+  };
+
+  const handleProducts = () => {
+    history.push('/products');
+  };
 
   return (
-    <div style={{ display: 'flex' }}>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Descrição</th>
-            {userFullNames.map(userFullName => (
-              <th key={userFullName}>{userFullName}</th>
-            ))}
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className={product.type === 'D' ? 'yellow-row' : ''}>
-              <td>{product.name}</td>
-              {userFullNames.map(userFullName => (
-                <td key={userFullName}>
-                  {orders.reduce((total, order) => {
-                    const orderItem = order.items.find(item => item.productId === product.id);
-                    if (orderItem && order.userFullName === userFullName && product.name === orderItem.product) {
-                      total += orderItem.quantity;
-                    }
-                    return total;
-                  }, 0)}
-                </td>
-              ))}
-              <td>
-                {orders.reduce((total, order) => {
-                  const orderItem = order.items.find(item => item.productId === product.id);
-                  if (orderItem && product.name === orderItem.product) {
-                    total += orderItem.quantity;
-                  }
-                  return total;
-                }, 0)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
+    <div className="home-container">
+      <header className="header">
+        <nav>
+          <p>Kanashiro Pastéis</p>
+          <ul>
+            <li><a href="#servicos" onClick={handleScroll}>Exibir os pedidos</a></li>
+            <li><a href="#servicos" onClick={handleScroll}>Editar pedidos</a></li>
+            <li><a href="#servicos" onClick={handleScroll}>Faturamento</a></li>
+            <li><a href="#servicos" onClick={handleScroll}>Produtos</a></li>
+            <li><a href="#servicos" onClick={handleLogout}>Sair</a></li>
+          </ul>
+        </nav>
 
-      </table>
+        <div id="home" className="header-content">
+          <h1>Bem vindo(a) {auth.user}</h1>
+        </div>
+      </header>
+
+      <section id="servicos" className="servicos" ref={servicosRef}>
+        <h1 className="servicos-title">Serviços</h1>
+        <div className="servicos-cards">
+          <div className="card">
+            <Table />
+            <div className="card-content">
+              <h3>Exibir os pedidos</h3>
+              <p>Visualize todos os pedidos efetuados para a data atual.</p>
+              <button onClick={handleOrders}>Exibir</button>
+            </div>
+          </div>
+
+          <div className="card">
+            <Edit />
+            <div className="card-content">
+              <h3>Editar pedidos</h3>
+              <p>Visualize os detalhes do pedido e edite caso necessário.</p>
+              <button onClick={handleUpdateOrder}>Exibir</button>
+            </div>
+          </div>
+
+          <div className="card">
+            <Clipboard />
+            <div className="card-content">
+              <h3>Faturamento</h3>
+              <p>Exibir todas as vendas e realizar a cobrança dos pedidos.</p>
+              <button onClick={handleBilling}>Exibir</button>
+            </div>
+          </div>
+
+          <div className="card">
+            <Package />
+            <div className="card-content">
+              <h3>Produtos</h3>
+              <p>Consultar, criar e editar produtos.</p>
+              <button onClick={handleProducts}>Exibir</button>
+            </div>
+          </div>
+
+          <div className="card">
+            <Archive />
+            <div className="card-content">
+              <h3>Estoque</h3>
+              <p>Exibir estoque de produtos.</p>
+              <button>Exibir</button>
+            </div>
+          </div>
+
+          <div className="card">
+            <X />
+            <div className="card-content">
+              <h3>Sair</h3>
+              <p>Sair da página.</p>
+              <button onClick={handleLogout}>Sair</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <footer className="footer">
+        <section id="contato" className="contato">
+          <div className="contato-card">
+            <h1>Entre em contato com os desenvolvedores</h1>
+            <div className="contato-columns">
+              <div className="contato-column">
+                <h3><User />Gisele F Gois</h3>
+                <ul>
+                  <li><Mail />giselefgois@gmail.com</li>
+                  <li><Phone />(11) 97063-5734</li>
+                </ul>
+              </div>
+              <div className="contato-column">
+                <h3><User />Jeniffer A Souza</h3>
+                <ul>
+                  <li><Mail />jen_as@outlook.com</li>
+                  <li><Phone />(19) 99294-8383</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </footer>
     </div>
   );
 }

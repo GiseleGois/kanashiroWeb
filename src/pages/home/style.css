@@ -1,36 +1,268 @@
-table {
-  border-collapse: collapse;
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
-  color: #333;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+* {
+  box-sizing: border-box;
 }
 
-th,
-td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: left;
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  width: 100vw;
 }
 
-th {
-  background-color: #f2f2f2;
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  padding: 10px 15px;
+  border-radius: 8px;
   font-weight: bold;
-  text-align: left;
+  border: 0;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
 }
 
-tr:hover {
-  background-color: #ddd;
+header {
+  height: calc(100vh - 150px);
+  background: no-repeat center/cover url('../../assets/wp4118241.jpg');
 }
 
-.container {
+header nav {
   display: flex;
   justify-content: space-between;
+  margin: auto 30px;
 }
 
-.table-container {
-  width: 48%;
+header nav ul {
+  display: flex;
 }
 
-.yellow-row {
-  background-color: yellow;
+header nav ul li {
+  margin: 0 15px;
+}
+
+.header-content {
+  max-width: 400px;
+  margin: 150px auto;
+  text-align: center;
+}
+
+.header-content h1 {
+  margin-bottom: 10px;
+  font-size: 3rem;
+  color: #e5e5e5;
+}
+
+.servicos {
+  padding: 15px;
+}
+
+.servicos .servicos-title {
+  text-align: center;
+  margin: 35px 0;
+}
+
+.servicos .servicos-cards {
+  display: flex;
+  max-width: 950px;
+  justify-content: center;
+  margin: auto;
+  flex-wrap: wrap;
+}
+
+
+.servicos .card {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 20px;
+  margin-bottom: 15px;
+}
+
+.servicos .card svg:hover {
+  margin-top: 10px;
+  stroke: #1D61DD;
+  transform: scale(1.5);
+}
+
+.servicos .card svg {
+  width: 80px;
+  height: 80px;
+  margin: 10px;
+  transition: all 0.5s;
+}
+
+.servicos .card h3 {
+  font-weight: bold;
+}
+
+.servicos .card p {
+  color: gray;
+  font-size: .8rem;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.servicos .card .card-content {
+  height: 180px;
+  text-align: center;
+}
+
+.servicos .card button {
+  margin-top: 15px;
+  background: #1D61DD;
+  width: 100%;
+}
+
+.footer {
+  margin-top: 50px;
+  background-color: #0a0a0ad5;
+  padding: 20px;
+  text-align: center;
+  color: #e5e5e5;
+}
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-icons svg {
+  margin: 0 10px;
+}
+
+.contato-card {
+  margin-bottom: 20px;
+}
+
+.contato-card h1 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.contato-columns {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.contato-column {
+  flex: 1;
+  max-width: 300px;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.contato-column h3 {
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contato-column h3 svg {
+  margin-right: 5px;
+}
+
+.contato-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.contato-column li {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.contato-column li svg {
+  margin-right: 5px;
+}
+
+[data-feather="mail"]::before {
+  content: "\f0e0";
+}
+
+[data-feather="phone"]::before {
+  content: "\f095";
+}
+
+/* RESPONSIVENESS */
+
+
+/* SPECIAL for map */
+
+@media (max-width: 950px) {
+  .contato {
+    padding: 60px 0;
+  }
+
+  .contato .contato-card {
+    left: 40px;
+  }
+}
+
+@media (max-width: 800px) {
+  .contato {
+    padding: 60px 0;
+  }
+
+  .contato .contato-card {
+    position: static;
+    margin: 40px auto;
+  }
+}
+
+
+/* Landscape TABLET and down */
+
+@media (max-width: 767px) {}
+
+
+/* Landscape PHONES and down */
+
+@media (max-width: 480px) {
+  body {
+    margin-bottom: 55px;
+  }
+
+  header nav ul {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    z-index: 99;
+    background: #1D61DD;
+    color: white;
+    font-weight: bold;
+    height: 55px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  header nav p {
+    width: 100%;
+    text-align: center;
+  }
 }
