@@ -58,6 +58,33 @@ function Orders() {
 
   const userFullNames = [...new Set(orders.map(order => order.userFullName))];
 
+  const calculateTotalQuantity = (productId, priorityMin, priorityMax) => {
+    return orders.reduce((total, order) => {
+      const orderItem = order.items.find(item => item.productId === productId);
+      if (orderItem) {
+        const product = products.find(product => product.id === productId);
+        if (product && product.priority >= priorityMin && product.priority <= priorityMax) {
+          total += orderItem.quantity;
+        }
+      }
+      return total;
+    }, 0);
+  };
+
+  const calculateTotalQuantityByPriorityRange = (priorityMin, priorityMax) => {
+    return products.reduce((total, product) => {
+      if (product.priority >= priorityMin && product.priority <= priorityMax) {
+        const productQuantity = calculateTotalQuantity(product.id, priorityMin, priorityMax);
+        total += productQuantity;
+      }
+      return total;
+    }, 0);
+  };
+
+  const totalQuantityPriority1to32 = calculateTotalQuantityByPriorityRange(1, 32);
+
+  const totalQuantityPriority33to43 = calculateTotalQuantityByPriorityRange(33, 43);
+
   return (
     <div style={{ display: 'flex' }}>
       <table className="table">
@@ -77,8 +104,8 @@ function Orders() {
               {userFullNames.map(userFullName => (
                 <td key={userFullName}>
                   {orders.reduce((total, order) => {
-                    const orderItem = order.items.find(item => item.productId === product.id);
-                    if (orderItem && order.userFullName === userFullName && product.name === orderItem.product) {
+                    const orderItem = order.items.find(item => item.productId === product.id && item.product === product.name);
+                    if (orderItem && order.userFullName === userFullName) {
                       total += orderItem.quantity;
                     }
                     return total;
@@ -87,8 +114,8 @@ function Orders() {
               ))}
               <td>
                 {orders.reduce((total, order) => {
-                  const orderItem = order.items.find(item => item.productId === product.id);
-                  if (orderItem && product.name === orderItem.product) {
+                  const orderItem = order.items.find(item => item.productId === product.id && item.product === product.name);
+                  if (orderItem) {
                     total += orderItem.quantity;
                   }
                   return total;
@@ -96,8 +123,36 @@ function Orders() {
               </td>
             </tr>
           ))}
+          <tr>
+            <td><strong>Total de pasteis</strong></td>
+            {userFullNames.map(userFullName => (
+              <td key={userFullName}></td>
+            ))}
+            <td>
+              <strong>{totalQuantityPriority1to32}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Total de salgados</strong></td>
+            {userFullNames.map(userFullName => (
+              <td key={userFullName}>
+                {orders.reduce((total, order) => {
+                  const orderItem = order.items.find(item => {
+                    const product = products.find(p => p.id === item.productId);
+                    return product && product.priority >= 33 && product.priority <= 43 && item.product === product.name;
+                  });
+                  if (orderItem && order.userFullName === userFullName) {
+                    total += orderItem.quantity;
+                  }
+                  return total;
+                }, 0)}
+              </td>
+            ))}
+            <td>
+              <strong>{totalQuantityPriority33to43}</strong>
+            </td>
+          </tr>
         </tbody>
-
       </table>
     </div>
   );
