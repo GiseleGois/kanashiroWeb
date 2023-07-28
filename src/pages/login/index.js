@@ -23,7 +23,7 @@ function Login() {
   return (
     <div className="blur-bg">
       <div className="login-container">
-        <div className="card">
+        <div className="login-card">
           <h2 className="title-field">Bem vindo(a)</h2>
           <form onSubmit={handleLogin}>
             <input type="email" id="email" name="email" className="input-field" placeholder='Digite seu email' />

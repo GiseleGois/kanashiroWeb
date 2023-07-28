@@ -4,9 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './style.css';
 import moment from 'moment';
 import Select from 'react-select';
-import listOrdersById from '../../service/listOrdersById';
-// import updateOrder from '../../service/updateOrder';
-import listServices from '../../service/getServices';
+import { listOrders, removeItem, insertItem, listProductAndServices } from '../../service';
 
 export default function UpdateOrder() {
   const [startDate, setStartDate] = useState(null);
@@ -55,19 +53,34 @@ export default function UpdateOrder() {
     console.log(orderId)
     setEditMode(true);
     setShowNewInput(true);
-    // updateOrder(orderId);
   };
 
-  const handleAddItem = () => {
-    setOrderItems((prevItems) => [...prevItems, newItem]);
-    setNewItem({ product: '', quantity: '' });
+  const handleAddItem = (productId, orderId, quantity) => {
+    if (!productId || !orderId || !quantity) {
+      throw new Error('No product or orderId was found');
+    }
+
+    setOrderItems((prevItems) => [...prevItems, { product: productId, quantity }]);
+    setNewItem({ selectedService: null, quantity: '' });
+
+    insertItem(orderId, productId, quantity);
   };
 
-  const handleRemoveItem = () => {
-    alert('Essa função ainda não esta disponivel');
+
+  const handleRemoveItem = (productId, orderId) => {
+    const indexToRemove = selectedOrder.items.findIndex(item => item.product === productId);
+
+    if (indexToRemove !== -1) {
+      const updatedItems = [...selectedOrder.items];
+      const removedItem = updatedItems.splice(indexToRemove, 1)[0];
+
+      setOrderItems(removedItem.productId);
+      removeItem(orderId, removedItem.productId);
+    }
   };
 
   const handleServiceChange = (selectedOption) => {
+    console.log('new item selected:', selectedOption)
     setNewItem({ ...newItem, selectedService: selectedOption });
   };
 
@@ -79,7 +92,7 @@ export default function UpdateOrder() {
       console.log(endOfDay);
 
       setIsLoading(true);
-      listOrdersById()
+      listOrders()
         .then((response) => {
           const filteredOrders = response.data.filter((order) => {
             const orderDate = moment(order.createAt);
@@ -98,14 +111,12 @@ export default function UpdateOrder() {
   }, [startDate, endDate]);
 
   useEffect(() => {
-    listServices()
+    listProductAndServices()
       .then(response => {
         setServices(response);
-      })
-      .catch(error => {
-        console.log('Error:', error);
       });
   }, []);
+
 
   return (
     <div className='update-order-container'>
@@ -138,17 +149,17 @@ export default function UpdateOrder() {
           <div className="servicos-cards">
             {isLoading ? (
               <div class="spinner">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             ) : orders.length === 0 ? (
               <div>Não há nenhum pedido a ser exibido</div>
             ) : (
@@ -193,7 +204,7 @@ export default function UpdateOrder() {
                       <td>{item.quantity}</td>
                       {editMode && (
                         <td>
-                          <button onClick={() => handleRemoveItem()} className="remove-item">Remover</button>
+                          <button onClick={() => handleRemoveItem(item.product, selectedOrder.orderId)} className="remove-item">Remover</button>
                         </td>
                       )}
                     </tr>
@@ -201,42 +212,46 @@ export default function UpdateOrder() {
 
                   {editMode && showNewInput && (
                     <tr>
-                      <td>
-                        <Select
-                          className='input-add-item menu-portal'
-                          value={newItem.selectedService}
-                          onChange={handleServiceChange}
-                          options={services.map(service => ({ value: service.id, label: service.type }))}
-                          placeholder="Selecione um serviço..."
-                          isSearchable
-                          isClearable
-                          ref={selectRef}
-                          menuPlacement="top"
-                          components={{
-                            Option: props => (
-                              <div
-                                className={props.isFocused ? 'highlighted-option' : ''}
-                                onMouseEnter={props.innerProps.onMouseEnter}
-                                onMouseMove={props.innerProps.onMouseMove}
-                                onClick={props.innerProps.onClick}
-                              >
-                                {props.label}
-                              </div>
-                            )
-                          }}
-                        />
-                      </td>
-
-                      <td>
-                        <input
-                          className='input-add-item'
-                          type="text"
-                          value={newItem.quantity}
-                          onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
-                        />
-                      </td>
-                      <td>
-                        <button onClick={handleAddItem} className="add-button">Adicionar novo item</button>
+                      <td colSpan={editMode ? 3 : 2}>
+                        <div className="input-container">
+                          <Select
+                            className='input-add-item menu-portal'
+                            value={newItem.selectedService}
+                            onChange={handleServiceChange}
+                            options={services.map(service => ({ value: service.id, label: service.name }))}
+                            placeholder="Selecione um novo item"
+                            isSearchable
+                            isClearable
+                            ref={selectRef}
+                            menuPlacement="top"
+                            components={{
+                              Option: props => (
+                                <div
+                                  className={props.isFocused ? 'highlighted-option' : ''}
+                                  onMouseEnter={props.innerProps.onMouseEnter}
+                                  onMouseMove={props.innerProps.onMouseMove}
+                                  onClick={props.innerProps.onClick}
+                                >
+                                  {props.label}
+                                </div>
+                              )
+                            }}
+                          />
+                        </div>
+                        <div className="input-container">
+                          <input
+                            className='input-add-item'
+                            type="text"
+                            placeholder='Digite uma quantidade'
+                            value={newItem.quantity}
+                            onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
+                          />
+                        </div>
+                        <div className="input-container">
+                          <button onClick={() => handleAddItem(newItem.selectedService.value, selectedOrder.orderId, newItem.quantity)} className="add-button">
+                            Adicionar novo item
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   )}
@@ -252,7 +267,6 @@ export default function UpdateOrder() {
           </div>
         </div>
       )}
-
     </div>
   );
 }

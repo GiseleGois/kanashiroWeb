@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Table, Package, Edit, Clipboard, Archive, X, Mail, Phone, User } from 'react-feather';
+import { Table, Package, Edit, Clipboard, Users, X} from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import { auth } from '../../firebase';
 import './style.css';
@@ -17,12 +17,6 @@ function Home() {
 
     return () => unsubscribeAuth();
   }, [history]);
-
-  const handleScroll = (e) => {
-    e.preventDefault();
-    const target = servicosRef.current;
-    target.scrollIntoView({ behavior: 'smooth' });
-  };
 
   const handleLogout = () => {
     auth.signOut().then(() => {
@@ -46,22 +40,19 @@ function Home() {
     history.push('/products');
   };
 
+  const handleManageUsers = () => {
+    history.push('/manage-users');
+  };
+
   return (
     <div className="home-container">
       <header className="header">
         <nav>
           <p>Kanashiro Pastéis</p>
-          <ul>
-            <li><a href="#servicos" onClick={handleScroll}>Exibir os pedidos</a></li>
-            <li><a href="#servicos" onClick={handleScroll}>Editar pedidos</a></li>
-            <li><a href="#servicos" onClick={handleScroll}>Faturamento</a></li>
-            <li><a href="#servicos" onClick={handleScroll}>Produtos</a></li>
-            <li><a href="#servicos" onClick={handleLogout}>Sair</a></li>
-          </ul>
         </nav>
 
         <div id="home" className="header-content">
-          <h1>Bem vindo(a) {auth.user}</h1>
+          <h1>Bem vindo(a)</h1>
         </div>
       </header>
 
@@ -105,11 +96,11 @@ function Home() {
           </div>
 
           <div className="card">
-            <Archive />
+            <Users />
             <div className="card-content">
-              <h3>Estoque</h3>
-              <p>Exibir estoque de produtos.</p>
-              <button>Exibir</button>
+              <h3>Gerenciar usuarios</h3>
+              <p>Habilitar e desabilitar login de usuario.</p>
+              <button onClick={handleManageUsers}>Exibir</button>
             </div>
           </div>
 
@@ -125,30 +116,6 @@ function Home() {
         </div>
       </section>
 
-
-      <footer className="footer">
-        <section id="contato" className="contato">
-          <div className="contato-card">
-            <h1>Entre em contato com os desenvolvedores</h1>
-            <div className="contato-columns">
-              <div className="contato-column">
-                <h3><User />Gisele F Gois</h3>
-                <ul>
-                  <li><Mail />giselefgois@gmail.com</li>
-                  <li><Phone />(11) 97063-5734</li>
-                </ul>
-              </div>
-              <div className="contato-column">
-                <h3><User />Jeniffer A Souza</h3>
-                <ul>
-                  <li><Mail />jen_as@outlook.com</li>
-                  <li><Phone />(19) 99294-8383</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-      </footer>
     </div>
   );
 }
