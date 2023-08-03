@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './style.css';
-import moment from 'moment';
 import Select from 'react-select';
 import { listOrders, removeItem, insertItem, listProductAndServices } from '../../service';
 
@@ -86,20 +85,10 @@ export default function UpdateOrder() {
 
   useEffect(() => {
     if (startDate && endDate) {
-      const startOfDay = moment(startDate).startOf('day');
-      const endOfDay = moment(endDate).endOf('day');
-      console.log(startOfDay);
-      console.log(endOfDay);
-
       setIsLoading(true);
-      listOrders()
+      listOrders(startDate, endDate)
         .then((response) => {
-          const filteredOrders = response.data.filter((order) => {
-            const orderDate = moment(order.createAt);
-            console.log(orderDate);
-            return orderDate.isBetween(startOfDay, endOfDay, null, '[]');
-          });
-          setOrders(filteredOrders);
+          setOrders(response);
         })
         .catch((error) => {
           console.log('Error:', error);

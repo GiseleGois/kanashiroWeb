@@ -1,6 +1,6 @@
 import axios from "axios";
 import { auth } from "../firebase";
-import config, { urlApiBrasil } from '../config';
+import config from '../config';
 
 const handleUserLogged = () => {
   if (!auth.currentUser) {
@@ -93,17 +93,31 @@ const removeItem = async (orderId, itemToRemove) => {
   }
 };
 
-const listOrders = async () => {
+const listOrders = async (startDate, endDate) => {
   try {
-    const { data } = await axios.get(`${config.url}/orders`);
-    const responseData = {
-      data
-    }
-    return responseData;
+    const endDateTime = new Date(endDate)
+    endDateTime.setHours(23, 59, 59, 999);
+    const endDateISO = endDateTime.toISOString();
+
+    const { url } = config;
+
+    const instance = axios.create({
+      baseURL: url,
+      headers: {
+        'Content-type': 'application/json',
+      },
+    });
+
+    const { data } = await instance.get(`/fetch-order-by-date`, {
+      params: { startDate, endDate: endDateISO },
+    });
+
+    return data;
   } catch (error) {
-    throw new Error('Falha ao obter todos os pedidos');
+    throw new Error('Falha ao obter todos os pedidos' + error);
   }
 };
+
 
 const listProducts = async () => {
   try {
