@@ -38,7 +38,7 @@ function BillingDetail() {
       .then((detailOrder) => {
         setOrder(detailOrder);
 
-        const sum = detailOrder.reduce((acc, item) => acc + item.total, 0);
+        const sum = detailOrder.reduce((acc, item) => acc + item.total, 0).toFixed(2);
         setTotalValue(sum);
       })
       .finally(() => {
@@ -98,7 +98,7 @@ function BillingDetail() {
               </thead>
               <tbody>
                 {order.map((item) => (
-                  <tr key={item.orderId}>
+                  <tr key={item.type}>
                     <td>{item.type}</td>
                     <td>{item.value}</td>
                     <td>{item.quantity}</td>
@@ -107,7 +107,7 @@ function BillingDetail() {
                 ))}
                 <tr>
                   <td colSpan="3">Total</td>
-                  <td>{totalValue}</td>
+                  <td>R$: {totalValue}</td>
                 </tr>
               </tbody>
             </table>

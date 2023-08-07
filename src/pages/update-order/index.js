@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './style.css';
 import Select from 'react-select';
-import { listOrders, removeItem, insertItem, listProductAndServices } from '../../service';
+import { listOrders, removeItem, insertItem, listProductsToUpdateOrders } from '../../service';
 
 export default function UpdateOrder() {
   const [startDate, setStartDate] = useState(null);
@@ -20,6 +20,7 @@ export default function UpdateOrder() {
   const [services, setServices] = useState([]);
   const datePickerRef = useRef(null);
   const selectRef = useRef(null);
+  const [quantityMissing, setQuantityMissing] = useState(false);
 
   const handleDateChange = (dates) => {
     const [start, end] = dates;
@@ -48,25 +49,39 @@ export default function UpdateOrder() {
     }
   };
 
-  const handleEditOrder = (orderId) => {
-    console.log(orderId)
+  const handleEditOrder = async () => {
     setEditMode(true);
     setShowNewInput(true);
+    await fetchUpdatedOrderData(startDate, endDate);
   };
 
-  const handleAddItem = (productId, orderId, quantity) => {
+  const fetchUpdatedOrderData = async (startDate, endDate) => {
+    setIsLoading(true);
+    try {
+      const response = await listOrders(startDate, endDate);
+      setOrders(response);
+    } catch (error) {
+      console.log('Error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddItem = async (productId, orderId, quantity) => {
     if (!productId || !orderId || !quantity) {
-      throw new Error('No product or orderId was found');
+      setQuantityMissing(true);
+      return;
     }
 
+    setQuantityMissing(false);
     setOrderItems((prevItems) => [...prevItems, { product: productId, quantity }]);
     setNewItem({ selectedService: null, quantity: '' });
 
-    insertItem(orderId, productId, quantity);
+    await insertItem(orderId, productId, quantity);
+    fetchUpdatedOrderData(startDate, endDate); // Fetch updated order data
   };
 
-
-  const handleRemoveItem = (productId, orderId) => {
+  const handleRemoveItem = async (productId, orderId) => {
     const indexToRemove = selectedOrder.items.findIndex(item => item.product === productId);
 
     if (indexToRemove !== -1) {
@@ -74,12 +89,13 @@ export default function UpdateOrder() {
       const removedItem = updatedItems.splice(indexToRemove, 1)[0];
 
       setOrderItems(removedItem.productId);
-      removeItem(orderId, removedItem.productId);
+      await removeItem(orderId, removedItem.productId);
+
+      fetchUpdatedOrderData(startDate, endDate);
     }
   };
 
   const handleServiceChange = (selectedOption) => {
-    console.log('new item selected:', selectedOption)
     setNewItem({ ...newItem, selectedService: selectedOption });
   };
 
@@ -100,7 +116,7 @@ export default function UpdateOrder() {
   }, [startDate, endDate]);
 
   useEffect(() => {
-    listProductAndServices()
+    listProductsToUpdateOrders()
       .then(response => {
         setServices(response);
       });
@@ -137,7 +153,7 @@ export default function UpdateOrder() {
           <h1 className="servicos-title">Pedidos</h1>
           <div className="servicos-cards">
             {isLoading ? (
-              <div class="spinner">
+              <div className="spinner">
                 <div></div>
                 <div></div>
                 <div></div>
@@ -229,15 +245,23 @@ export default function UpdateOrder() {
                         </div>
                         <div className="input-container">
                           <input
-                            className='input-add-item'
+                            className={`input-add-item${quantityMissing ? ' input-error' : ''}`}
                             type="text"
                             placeholder='Digite uma quantidade'
                             value={newItem.quantity}
                             onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
                           />
+                          {quantityMissing && <span className="input-error-message">Campo obrigatório</span>}
                         </div>
+
                         <div className="input-container">
-                          <button onClick={() => handleAddItem(newItem.selectedService.value, selectedOrder.orderId, newItem.quantity)} className="add-button">
+                          <button
+                            onClick={() => {
+                              handleAddItem(newItem.selectedService.value, selectedOrder.orderId, newItem.quantity);
+                              fetchUpdatedOrderData(startDate, endDate);
+                            }}
+                            className="add-button"
+                          >
                             Adicionar novo item
                           </button>
                         </div>

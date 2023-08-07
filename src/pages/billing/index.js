@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { auth } from '../../firebase';
 import './style.css';
-import { getOrdersById, closeInvoice } from '../../service';
+import { ordersThisWeek, closeInvoice } from '../../service';
 
 function Billing() {
   const history = useHistory();
@@ -12,7 +12,7 @@ function Billing() {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchUser, setSearchUser] = useState('');
   const [usernames, setUsernames] = useState([]);
-  const [isClientSelected, setIsClientSelected] = useState(false); // New state to track client selection
+  const [isClientSelected, setIsClientSelected] = useState(false);
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
@@ -28,16 +28,22 @@ function Billing() {
 
   useEffect(() => {
     filterOrdersByUser();
+
   }, [orders, searchUser]);
 
   const handleGetOrders = () => {
     setIsLoading(true);
 
-    getOrdersById()
-      .then((userOrders) => {
-        setOrders(userOrders);
-        const names = userOrders.map((order) => order.username);
-        setUsernames([...new Set(names)]);
+    ordersThisWeek()
+      .then((response) => {
+        if (Array.isArray(response)) {
+          setOrders(response);
+          const names = response.map((order) => order.username);
+          setUsernames([...new Set(names)]);
+        } else if (response.message === 'Não há pedidos nos últimos 7 dias.') {
+          setOrders([]);
+          setUsernames([]);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -71,7 +77,6 @@ function Billing() {
     });
     setFilteredOrders(filtered);
 
-    // Check if a client is selected and update the state accordingly
     setIsClientSelected(!!searchUser);
   };
 
@@ -106,7 +111,7 @@ function Billing() {
             </div>
           </div>
         ) : filteredOrders.length === 0 ? (
-          <div>Não há nenhum pedido a ser exibido</div>
+          <div>Não há nenhum pedido nos ultimos 7 dias a ser exibido.</div>
         ) : (
           <table>
             <thead>
@@ -124,7 +129,7 @@ function Billing() {
                   <td>{order.userFullName}</td>
                   <td>{order.orderId}</td>
                   <td>{order.total}</td>
-                  <td>{order.createAt}</td>
+                  <td>{order.createdAt}</td>
                   <td>
                     <button className="view-button" onClick={() => handleShowOrderDetail(order.orderId)}>
                       Visualizar pedido

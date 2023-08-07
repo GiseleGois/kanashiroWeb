@@ -306,6 +306,16 @@
   box-shadow: 0 0 0 2px rgba(29, 97, 221, 0.2);
 }
 
+.input-error {
+  border: 1px solid red;
+}
+
+.input-error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
 .menu-portal .react-select__menu {
   top: calc(100% + 8px);
   z-index: 9999;

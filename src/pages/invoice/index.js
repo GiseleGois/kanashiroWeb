@@ -82,7 +82,12 @@ function CloseInvoice() {
     const invoiceData = {
       nome: name,
       date: invoice[0].date,
-      total: parseFloat(invoice[0].total).toFixed(2),
+      total: parseFloat(invoice[0].total).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
       status: invoice[0].status,
     };
 
@@ -129,7 +134,12 @@ function CloseInvoice() {
                     <td>{item.invoiceId}</td>
                     <td>{item.date}</td>
                     <td>{item.status}</td>
-                    <td>{item.total}</td>
+                    <td>{parseFloat(item.total).toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}</td>
                   </tr>
                 ))}
               </tbody>

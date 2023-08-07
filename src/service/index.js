@@ -8,7 +8,7 @@ const handleUserLogged = () => {
   }
 };
 
-const getOrdersById = async () => {
+const ordersThisWeek = async () => {
   handleUserLogged();
   try {
     const { data } = await axios.get(`${config.url}/v2/orders`);
@@ -50,9 +50,9 @@ const getInvoicesByInvoiceId = async (invoiceId) => {
   }
 };
 
-const listProductAndServices = async () => {
+const listProductsToUpdateOrders = async () => {
   try {
-    const { data } = await axios.get(`${config.url}/fetch-product-and-extra-service`);
+    const { data } = await axios.get(`${config.url}/fetch-product-type`);
     return data;
   } catch (error) {
     throw new Error('Falha ao obter todos os serviços');
@@ -61,10 +61,11 @@ const listProductAndServices = async () => {
 
 const insertItem = async (orderId, productId, quantity) => {
   try {
+    const quantityNumber = parseInt(quantity);
     const { data } = await axios.put(`${config.url}/update-order/${orderId}`, {
       items: [
         {
-          quantity: quantity,
+          quantity: quantityNumber,
           id: productId,
         }
       ]
@@ -117,7 +118,6 @@ const listOrders = async (startDate, endDate) => {
     throw new Error('Falha ao obter todos os pedidos' + error);
   }
 };
-
 
 const listProducts = async () => {
   try {
@@ -181,11 +181,11 @@ const sendInvoiceToUser = async (phone, invoiceData) => {
 };
 
 export {
-  getOrdersById,
+  ordersThisWeek,
   fetchOrderById,
   closeInvoice,
   getInvoicesByInvoiceId,
-  listProductAndServices,
+  listProductsToUpdateOrders,
   insertItem,
   removeItem,
   listOrders,
