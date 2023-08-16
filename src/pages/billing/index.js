@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { auth } from '../../firebase';
 import './style.css';
-import { ordersThisWeek, closeInvoice } from '../../service';
+import { ordersThisWeek, closeInvoice, checkUserPermission } from '../../service';
 
 function Billing() {
   const history = useHistory();
@@ -13,13 +13,27 @@ function Billing() {
   const [searchUser, setSearchUser] = useState('');
   const [usernames, setUsernames] = useState([]);
   const [isClientSelected, setIsClientSelected] = useState(false);
+  const [hasAccess, setHasAccess] = useState(null);
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       if (!user) {
         history.push('/');
       } else {
-        handleGetOrders();
+        checkUserPermission(user.uid)
+          .then((response) => {
+            if (response.hasAccess === true) {
+              setHasAccess(true);
+              handleGetOrders();
+            } else {
+              setHasAccess(false);
+            }
+          })
+          .catch((error) => {
+            console.error('Error checking user permission:', error);
+            history.push('/home');
+            setHasAccess(false);
+          });
       }
     });
 
@@ -110,37 +124,43 @@ function Billing() {
               <div></div>
             </div>
           </div>
-        ) : filteredOrders.length === 0 ? (
-          <div>Não há nenhum pedido nos ultimos 7 dias a ser exibido.</div>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Usuário e local</th>
-                <th>Pedido</th>
-                <th>Valor</th>
-                <th>Data</th>
-                <th>Detalhe</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredOrders.map((order) => (
-                <tr key={order.orderId}>
-                  <td>{order.userFullName}</td>
-                  <td>{order.orderId}</td>
-                  <td>{order.total}</td>
-                  <td>{order.createdAt}</td>
-                  <td>
-                    <button className="view-button" onClick={() => handleShowOrderDetail(order.orderId)}>
-                      Visualizar pedido
-                    </button>
-                  </td>
+          filteredOrders.length === 0 ? (
+            <div>Não há nenhum pedido nos últimos 7 dias a ser exibido.</div>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Usuário e local</th>
+                  <th>Pedido</th>
+                  <th>Valor</th>
+                  <th>Data</th>
+                  <th>Detalhe</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredOrders.map((order) => (
+                  <tr key={order.orderId}>
+                    <td>{order.userFullName}</td>
+                    <td>{order.orderId}</td>
+                    <td>{parseFloat(order.total).toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}</td>
+                    <td>{order.createdAt}</td>
+                    <td>
+                      <button className="view-button" onClick={() => handleShowOrderDetail(order.orderId)}>
+                        Visualizar pedido
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
         )}
-        {/* Conditionally render the "Fechar fatura" button */}
         {isClientSelected && (
           <button className="close-button" onClick={() => handleCloseInvoice(filteredOrders)}>
             Fechar fatura
@@ -148,7 +168,7 @@ function Billing() {
         )}
       </div>
     </div>
-  );
+  )
 }
 
 export default Billing;

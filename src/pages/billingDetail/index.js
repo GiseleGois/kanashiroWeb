@@ -3,7 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { FiDownload } from 'react-icons/fi';
 import { auth } from '../../firebase';
 import './style.css';
-import { fetchOrderById } from '../../service';
+import { fetchOrderById, checkUserPermission } from '../../service';
 
 function BillingDetail() {
   const history = useHistory();
@@ -14,12 +14,27 @@ function BillingDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [totalValue, setTotalValue] = useState(0);
 
+  const [hasAccess, setHasAccess] = useState(null);
+
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       if (!user) {
         history.push('/');
       } else {
-        handleGetOrder();
+        checkUserPermission(user.uid)
+          .then((response) => {
+            if (response.hasAccess === true) {
+              setHasAccess(true);
+              handleGetOrder();
+            } else {
+              setHasAccess(false);
+            }
+          })
+          .catch((error) => {
+            console.error('Error checking user permission:', error);
+            history.push('/home');
+            setHasAccess(false);
+          });
       }
     });
 

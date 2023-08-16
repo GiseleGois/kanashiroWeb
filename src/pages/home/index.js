@@ -1,17 +1,32 @@
-import React, { useEffect, useRef } from 'react';
-import { Table, Package, Edit, Clipboard, Users, X} from 'react-feather';
+import React, { useEffect, useRef, useState } from 'react';
+import { Table, Package, Edit, Clipboard, Users, X } from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import { auth } from '../../firebase';
 import './style.css';
+import { checkUserPermission } from '../../service';
 
 function Home() {
   const history = useHistory();
   const servicosRef = useRef(null);
 
+  const [hasAccess, setHasAccess] = useState(true);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       if (!user) {
         history.push('/');
+      } else {
+        checkUserPermission(user.uid)
+          .then(response => {
+            setHasAccess(response.hasAccess);
+            setLoading(false);
+          })
+          .catch(error => {
+            console.error("Error checking user permission:", error);
+            setHasAccess(false);
+            setLoading(false);
+          });
       }
     });
 
@@ -41,7 +56,7 @@ function Home() {
   };
 
   const handleManageUsers = () => {
-    history.push('/manage-users');
+    history.push('/management-users');
   };
 
   return (
@@ -73,7 +88,7 @@ function Home() {
             <div className="card-content">
               <h3>Editar pedidos</h3>
               <p>Visualize os detalhes do pedido e edite caso necessário.</p>
-              <button onClick={handleUpdateOrder}>Exibir</button>
+              <button onClick={handleUpdateOrder} disabled={!hasAccess || loading}>Exibir</button>
             </div>
           </div>
 
@@ -82,7 +97,7 @@ function Home() {
             <div className="card-content">
               <h3>Faturamento</h3>
               <p>Exibir todas as vendas e realizar a cobrança dos pedidos.</p>
-              <button onClick={handleBilling}>Exibir</button>
+              <button onClick={handleBilling} disabled={!hasAccess || loading}>Exibir</button>
             </div>
           </div>
 
@@ -91,16 +106,16 @@ function Home() {
             <div className="card-content">
               <h3>Produtos</h3>
               <p>Consultar, criar e editar produtos.</p>
-              <button onClick={handleProducts}>Exibir</button>
+              <button onClick={handleProducts} disabled={!hasAccess || loading}>Exibir</button>
             </div>
           </div>
 
           <div className="card">
             <Users />
             <div className="card-content">
-              <h3>Gerenciar usuarios</h3>
-              <p>Habilitar e desabilitar login de usuario.</p>
-              <button onClick={handleManageUsers}>Exibir</button>
+              <h3>Gerenciar usuários</h3>
+              <p>Habilitar e desabilitar login de usuário.</p>
+              <button onClick={handleManageUsers} disabled={!hasAccess || loading}>Exibir</button>
             </div>
           </div>
 
@@ -112,10 +127,8 @@ function Home() {
               <button onClick={handleLogout}>Sair</button>
             </div>
           </div>
-
         </div>
       </section>
-
     </div>
   );
 }

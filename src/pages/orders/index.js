@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { auth, db } from '../../firebase';
+import { auth } from '../../firebase';
 import './style.css';
+import { listProducts, listOrdersToExhibitInOrderPage } from '../../service';
 
 function Orders() {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [resumeTotal, setResumeTotal] = useState([]);
+  const [totalQuantitiesOfProducts, setTotalQuantitiesOfProducts] = useState({});
+  const [totalQuantitiesOfPasteis, setTotalQuantitiesOfPasteis] = useState(0);
+  const [totalQuantitiesOfSalgados, setTotalQuantitiesOfSalgados] = useState(0);
   const history = useHistory();
 
   useEffect(() => {
@@ -21,69 +24,64 @@ function Orders() {
   }, [history]);
 
   useEffect(() => {
-    db.collection('products').onSnapshot((snapshot) => {
-      const productsData = [];
-      snapshot.forEach((doc) => {
-        productsData.push({ id: doc.id, ...doc.data() });
-      });
-      productsData.sort((a, b) => a.priority - b.priority);
-      setProducts(productsData);
-    });
+    const fetchProducts = async () => {
+      try {
+        const productsData = await listProducts();
+        productsData.sort((a, b) => a.priority - b.priority);
+        setProducts(productsData);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   useEffect(() => {
-    const startTime = new Date();
-    startTime.setDate(startTime.getDate() - 1);
-    startTime.setHours(14, 0, 0, 0);
+    const fetchOrders = async () => {
+      const now = new Date();
+      const startDate = new Date(now);
+      startDate.setDate(now.getDate() - 1);
+      startDate.setHours(17, 0, 0, 0);
 
-    const endTime = new Date();
-    endTime.setHours(3, 59, 0, 0);
+      const endDate = new Date(now);
+      endDate.setHours(3, 0, 0, 0);
 
-    setStartDate(startTime);
-    setEndDate(endTime);
+      try {
+        const ordersData = await listOrdersToExhibitInOrderPage(startDate, endDate);
+        const extractedOrders = ordersData.combineItems;
+        const extractedResume = ordersData.groupedProducts;
+        const extractedTotalPasteis = ordersData.totalQuantities.totalNonSalgados;
+        const extractedTotalSalgados = ordersData.totalQuantities.groupedSalgados;
 
-    const unsubscribe = db.collection('orders')
-      .where('createAt', '>=', startTime)
-      .where('createAt', '<', endTime)
-      .onSnapshot((snapshot) => {
-        const ordersData = [];
-        snapshot.forEach((doc) => {
-          ordersData.push({ id: doc.id, ...doc.data() });
+        setOrders(extractedOrders);
+        setResumeTotal(extractedResume);
+        setTotalQuantitiesOfPasteis(extractedTotalPasteis);
+        setTotalQuantitiesOfSalgados(extractedTotalSalgados);
+
+        const totalQuantities = {};
+        extractedResume.forEach(item => {
+          totalQuantities[item.productId] = item.quantity;
         });
-        setOrders(ordersData);
-      });
+        setTotalQuantitiesOfProducts(totalQuantities);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    };
 
-    return () => unsubscribe();
+    fetchOrders();
   }, []);
 
+  const getItemQuantity = (productId, userFullName) => {
+    const order = orders.find(order => order.userFullName === userFullName);
+    if (order) {
+      const item = order.items.find(item => item.productId === productId);
+      return item ? item.quantity : 0;
+    }
+    return 0;
+  };
+
   const userFullNames = [...new Set(orders.map(order => order.userFullName))];
-
-  const calculateTotalQuantity = (productId, priorityMin, priorityMax) => {
-    return orders.reduce((total, order) => {
-      const orderItem = order.items.find(item => item.productId === productId);
-      if (orderItem) {
-        const product = products.find(product => product.id === productId);
-        if (product && product.priority >= priorityMin && product.priority <= priorityMax) {
-          total += orderItem.quantity;
-        }
-      }
-      return total;
-    }, 0);
-  };
-
-  const calculateTotalQuantityByPriorityRange = (priorityMin, priorityMax) => {
-    return products.reduce((total, product) => {
-      if (product.priority >= priorityMin && product.priority <= priorityMax) {
-        const productQuantity = calculateTotalQuantity(product.id, priorityMin, priorityMax);
-        total += productQuantity;
-      }
-      return total;
-    }, 0);
-  };
-
-  const totalQuantityPriority1to32 = calculateTotalQuantityByPriorityRange(1, 32);
-
-  const totalQuantityPriority33to43 = calculateTotalQuantityByPriorityRange(33, 43);
 
   return (
     <div style={{ display: 'flex' }}>
@@ -98,58 +96,42 @@ function Orders() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className={product.type === 'D' ? 'yellow-row' : ''}>
-              <td>{product.name}</td>
-              {userFullNames.map(userFullName => (
-                <td key={userFullName}>
-                  {orders.reduce((total, order) => {
-                    const orderItem = order.items.find(item => item.productId === product.id && item.product === product.name);
-                    if (orderItem && order.userFullName === userFullName) {
-                      total += orderItem.quantity;
-                    }
-                    return total;
-                  }, 0)}
+          {products.map((product) => {
+            const productQuantities = userFullNames.map(userFullName =>
+              getItemQuantity(product.id, userFullName)
+            );
+            const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
+
+            const shouldHideRow = totalQuantity === 0 && productQuantities.every(qty => qty === 0);
+
+            if (shouldHideRow) {
+              return null;
+            }
+
+            return (
+              <tr key={product.id} className={product.type === 'D' ? 'yellow-row' : ''}>
+                <td>{product.name}</td>
+                {userFullNames.map((userFullName, index) => (
+                  <td key={userFullName}>
+                    {productQuantities[index]}
+                  </td>
+                ))}
+                <td>
+                  {totalQuantity}
                 </td>
-              ))}
-              <td>
-                {orders.reduce((total, order) => {
-                  const orderItem = order.items.find(item => item.productId === product.id && item.product === product.name);
-                  if (orderItem) {
-                    total += orderItem.quantity;
-                  }
-                  return total;
-                }, 0)}
-              </td>
-            </tr>
-          ))}
+              </tr>
+            );
+          })}
           <tr>
             <td><strong>Total de pasteis</strong></td>
-            {userFullNames.map(userFullName => (
-              <td key={userFullName}></td>
-            ))}
             <td>
-              <strong>{totalQuantityPriority1to32}</strong>
+              <strong>{totalQuantitiesOfPasteis}</strong>
             </td>
           </tr>
           <tr>
             <td><strong>Total de salgados</strong></td>
-            {userFullNames.map(userFullName => (
-              <td key={userFullName}>
-                {orders.reduce((total, order) => {
-                  const orderItem = order.items.find(item => {
-                    const product = products.find(p => p.id === item.productId);
-                    return product && product.priority >= 33 && product.priority <= 43 && item.product === product.name;
-                  });
-                  if (orderItem && order.userFullName === userFullName) {
-                    total += orderItem.quantity;
-                  }
-                  return total;
-                }, 0)}
-              </td>
-            ))}
             <td>
-              <strong>{totalQuantityPriority33to43}</strong>
+              <strong>{totalQuantitiesOfSalgados}</strong>
             </td>
           </tr>
         </tbody>

@@ -119,11 +119,54 @@ const listOrders = async (startDate, endDate) => {
   }
 };
 
+const listOrdersToExhibitInOrderPage = async (startDate, endDate) => {
+  try {
+    const endDateTime = new Date(endDate)
+    endDateTime.setHours(23, 59, 59, 999);
+    const endDateISO = endDateTime.toISOString();
+
+    const { url } = config;
+
+    const instance = axios.create({
+      baseURL: url,
+      headers: {
+        'Content-type': 'application/json',
+      },
+    });
+
+    const { data } = await instance.get(`/fetch-orders`, {
+      params: { startDate, endDate: endDateISO },
+    });
+
+    return data;
+  } catch (error) {
+    throw new Error('Falha ao obter todos os pedidos' + error);
+  }
+};
+
 const listProducts = async () => {
   try {
     const { data } = await axios.get(`${config.url}/products`);
-    const getProducts = data.filter(product => product.type !== 'papel');
+    const getProducts = data.filter(product => product.type !== 'papel' && product.type !== 'entrega-p' && product.type !== 'entrega-d');
     return getProducts;
+  } catch (error) {
+    throw new Error('Falha ao obter todos os produtos');
+  }
+};
+
+const listAllProductType = async () => {
+  try {
+    const { data } = await axios.get(`${config.url}/types`);
+    return data;
+  } catch (error) {
+    throw new Error('Falha ao obter todos os produtos');
+  }
+};
+
+const updateProductType = async (productData) => {
+  try {
+    const { data } = await axios.put(`${config.url}/update-product`, productData);
+    return data;
   } catch (error) {
     throw new Error('Falha ao obter todos os produtos');
   }
@@ -133,6 +176,39 @@ const getUserData = async (userId) => {
   handleUserLogged();
   try {
     const { data } = await axios.get(`${config.url}/user-by-id/${userId}`);
+    return data;
+  } catch (error) {
+    throw new Error('Failed to get user data');
+  }
+};
+
+const usersData = async () => {
+  handleUserLogged();
+  try {
+    const { data } = await axios.get(`${config.url}/users`);
+    return data;
+  } catch (error) {
+    throw new Error('Failed to get user data');
+  }
+};
+
+const enableUser = async (userPermission) => {
+  handleUserLogged();
+  try {
+    const { data } = await axios.put(`${config.url}/enable-user/${userPermission.uuid}`, {
+      authorizer: userPermission.authorizer
+    });
+    console.log('data', data);
+    return data;
+  } catch (error) {
+    throw new Error('Failed to get user data');
+  }
+};
+
+const checkUserPermission = async (userId) => {
+  handleUserLogged();
+  try {
+    const { data } = await axios.get(`${config.url}/check-permission/${userId}`);
     return data;
   } catch (error) {
     throw new Error('Failed to get user data');
@@ -189,7 +265,13 @@ export {
   insertItem,
   removeItem,
   listOrders,
+  listOrdersToExhibitInOrderPage,
   listProducts,
+  listAllProductType,
+  updateProductType,
   getUserData,
+  usersData,
+  enableUser,
+  checkUserPermission,
   sendInvoiceToUser,
 };

@@ -13,6 +13,7 @@ function CloseInvoice() {
   const [userData, setUserData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [isSendingInvoice, setIsSendingInvoice] = useState(false);
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
@@ -79,6 +80,8 @@ function CloseInvoice() {
   };
 
   const handleSendInvoice = (phone, name) => {
+    setIsSendingInvoice(true);
+
     const invoiceData = {
       nome: name,
       date: invoice[0].date,
@@ -91,8 +94,18 @@ function CloseInvoice() {
       status: invoice[0].status,
     };
 
-    sendInvoiceToUser(phone, invoiceData);
+    sendInvoiceToUser(phone, invoiceData)
+      .then(() => {
+        alert('A cobrança foi enviada');
+        setIsSendingInvoice(false);
+        history.push('/billing');
+      })
+      .catch((error) => {
+        setIsSendingInvoice(false);
+        console.error('Error sending invoice:', error);
+      });
   };
+
 
   return (
     <div className="container">
@@ -151,7 +164,7 @@ function CloseInvoice() {
             Voltar
           </button>
           <button className="close-invoice-btn" onClick={handleGetUser}>
-            Enviar cobrança da fatura
+            {isSendingInvoice ? 'Enviando...' : 'Enviar cobrança da fatura'}
           </button>
         </div>
       </div>
