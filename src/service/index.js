@@ -1,15 +1,7 @@
 import axios from "axios";
-import { auth } from "../firebase";
 import config from '../config';
 
-const handleUserLogged = () => {
-  if (!auth.currentUser) {
-    throw new Error('User is not logged in');
-  }
-};
-
 const ordersThisWeek = async () => {
-  handleUserLogged();
   try {
     const { data } = await axios.get(`${config.url}/v2/orders`);
     return data;
@@ -19,7 +11,6 @@ const ordersThisWeek = async () => {
 };
 
 const fetchOrderById = async (orderId) => {
-  handleUserLogged();
   try {
     const { data } = await axios.get(`${config.url}/v2/fetch-order/${orderId}`);
     return data;
@@ -29,7 +20,6 @@ const fetchOrderById = async (orderId) => {
 };
 
 const closeInvoice = async (orders) => {
-  handleUserLogged();
   try {
     const { data } = await axios.post(`${config.url}/invoice`, {
       orders
@@ -41,7 +31,6 @@ const closeInvoice = async (orders) => {
 };
 
 const getInvoicesByInvoiceId = async (invoiceId) => {
-  handleUserLogged();
   try {
     const { data } = await axios.get(`${config.url}/invoice/${invoiceId}`);
     return data;
@@ -173,7 +162,6 @@ const updateProductType = async (productData) => {
 };
 
 const getUserData = async (userId) => {
-  handleUserLogged();
   try {
     const { data } = await axios.get(`${config.url}/user-by-id/${userId}`);
     return data;
@@ -183,7 +171,6 @@ const getUserData = async (userId) => {
 };
 
 const usersData = async () => {
-  handleUserLogged();
   try {
     const { data } = await axios.get(`${config.url}/users`);
     return data;
@@ -193,7 +180,6 @@ const usersData = async () => {
 };
 
 const enableUser = async (userPermission) => {
-  handleUserLogged();
   try {
     const { data } = await axios.put(`${config.url}/enable-user/${userPermission.uuid}`, {
       authorizer: userPermission.authorizer
@@ -206,7 +192,6 @@ const enableUser = async (userPermission) => {
 };
 
 const checkUserPermission = async (userId) => {
-  handleUserLogged();
   try {
     const { data } = await axios.get(`${config.url}/check-permission/${userId}`);
     return data;

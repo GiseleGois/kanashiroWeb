@@ -149,7 +149,7 @@ function Billing() {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}</td>
-                    <td>{order.createdAt}</td>
+                    <td>{order.scheduled}</td>
                     <td>
                       <button className="view-button" onClick={() => handleShowOrderDetail(order.orderId)}>
                         Visualizar pedido
