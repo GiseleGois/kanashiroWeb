@@ -11,17 +11,6 @@ function Orders() {
   const [totalQuantitiesOfProducts, setTotalQuantitiesOfProducts] = useState({});
   const [totalQuantitiesOfPasteis, setTotalQuantitiesOfPasteis] = useState(0);
   const [totalQuantitiesOfSalgados, setTotalQuantitiesOfSalgados] = useState(0);
-  const history = useHistory();
-
-  useEffect(() => {
-    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        history.push('/');
-      }
-    });
-
-    return () => unsubscribeAuth();
-  }, [history]);
 
   useEffect(() => {
     const fetchProducts = async () => {

@@ -17,24 +17,20 @@ function Billing() {
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        history.push('/');
-      } else {
-        checkUserPermission(user.uid)
-          .then((response) => {
-            if (response.hasAccess === true) {
-              setHasAccess(true);
-              handleGetOrders();
-            } else {
-              setHasAccess(false);
-            }
-          })
-          .catch((error) => {
-            console.error('Error checking user permission:', error);
-            history.push('/home');
+      checkUserPermission(user.uid)
+        .then((response) => {
+          if (response.hasAccess === true) {
+            setHasAccess(true);
+            handleGetOrders();
+          } else {
             setHasAccess(false);
-          });
-      }
+          }
+        })
+        .catch((error) => {
+          console.error('Error checking user permission:', error);
+          history.push('/home');
+          setHasAccess(false);
+        });
     });
 
     return () => unsubscribeAuth();

@@ -17,11 +17,7 @@ function CloseInvoice() {
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        history.push('/');
-      } else {
-        handleGetInvoices();
-      }
+      handleGetInvoices();
     });
 
     return () => unsubscribeAuth();

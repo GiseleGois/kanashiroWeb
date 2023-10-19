@@ -13,18 +13,14 @@ export default function ManagementUsers() {
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        history.push('/');
-      } else {
-        usersData()
-          .then(response => {
-            console.log('response', response);
-            setUserData(response);
-          })
-          .catch(error => {
-            console.error("Error fetching products:", error);
-          });
-      }
+      usersData()
+        .then(response => {
+          console.log('response', response);
+          setUserData(response);
+        })
+        .catch(error => {
+          console.error("Error fetching products:", error);
+        });
     });
 
     return () => unsubscribeAuth();

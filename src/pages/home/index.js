@@ -14,20 +14,16 @@ function Home() {
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        history.push('/');
-      } else {
-        checkUserPermission(user.uid)
-          .then(response => {
-            setHasAccess(response.hasAccess);
-            setLoading(false);
-          })
-          .catch(error => {
-            console.error("Error checking user permission:", error);
-            setHasAccess(false);
-            setLoading(false);
-          });
-      }
+      checkUserPermission(user.uid)
+        .then(response => {
+          setHasAccess(response.hasAccess);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error("Error checking user permission:", error);
+          setHasAccess(false);
+          setLoading(false);
+        });
     });
 
     return () => unsubscribeAuth();
