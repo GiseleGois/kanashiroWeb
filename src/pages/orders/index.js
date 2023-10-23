@@ -65,7 +65,7 @@ function Orders() {
     const order = orders.find(order => order.userFullName === userFullName);
     if (order) {
       const item = order.items.find(item => item.productId === productId);
-      return item ? item.quantity : 0;
+      return item ? item.quantity : '';
     }
     return 0;
   };
@@ -91,7 +91,7 @@ function Orders() {
             );
             const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
 
-            const shouldHideRow = totalQuantity === 0 && productQuantities.every(qty => qty === 0);
+            const shouldHideRow = totalQuantity === 0 && productQuantities.every(qty => qty === '');
 
             if (shouldHideRow) {
               return null;

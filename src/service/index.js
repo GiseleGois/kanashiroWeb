@@ -184,7 +184,6 @@ const enableUser = async (userPermission) => {
     const { data } = await axios.put(`${config.url}/enable-user/${userPermission.uuid}`, {
       authorizer: userPermission.authorizer
     });
-    console.log('data', data);
     return data;
   } catch (error) {
     throw new Error('Failed to get user data');
