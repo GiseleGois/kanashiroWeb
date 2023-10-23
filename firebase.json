@@ -1,7 +1,13 @@
 {
   "hosting": {
     "site": "web-kanashiro",
-    "public": "public",
+    "public": "build",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",

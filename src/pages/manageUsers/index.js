@@ -15,7 +15,6 @@ export default function ManagementUsers() {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       usersData()
         .then(response => {
-          console.log('response', response);
           setUserData(response);
         })
         .catch(error => {
@@ -44,10 +43,10 @@ export default function ManagementUsers() {
     if (selectedUser) {
       const updatedUser = { ...selectedUser, authorizer: newValue };
       enableUser(updatedUser)
-        .then(response => {
+        .then(() => {
           setUserData(prevUsers =>
             prevUsers.map(user =>
-              user.authorizer === updatedUser.authorizer ? updatedUser : user
+              user.uuid === updatedUser.uuid ? updatedUser : user
             )
           );
           closeModal();
