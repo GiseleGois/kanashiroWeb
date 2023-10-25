@@ -319,12 +319,15 @@
 .menu-portal .react-select__menu {
   top: calc(100% + 8px);
   z-index: 9999;
+  min-width: 500px; /* Ajuste o valor conforme necessário */
+  max-height: 500px; /* Ajuste o valor conforme necessário */
 }
 
 .highlighted-option {
-  padding: 8px 12px;
-  font-size: 16px;
-  background-color: #f8f8f8;
+  padding: 12px; /* Ajuste o valor conforme necessário */
+  font-size: 16px; /* Ajuste o valor conforme necessário */
+  background-color: #3498db;
+  color: #fff;
   transition: background-color 0.2s ease;
   cursor: pointer;
 }

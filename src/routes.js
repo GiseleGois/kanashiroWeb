@@ -11,6 +11,8 @@ import UpdateOrder from './pages/update-order';
 import Billing from './pages/billing';
 import BillingDetail from './pages/billingDetail';
 import CloseInvoice from './pages/invoice';
+import ShowOrdersOfPasteis from './pages/showOrdersOfPasteis';
+import ShowOrdersOfOthers from './pages/showOrdersOfOthers';
 
 function Routes() {
   return (
@@ -25,6 +27,8 @@ function Routes() {
       <Route path='/billing' component={Billing}/>
       <Route path='/billing-detail' component={BillingDetail} />
       <Route path='/invoice' component={CloseInvoice} />
+      <Route path='/show-orders-of-pasteis' component={ShowOrdersOfPasteis} />
+      <Route path='/show-orders-of-others' component={ShowOrdersOfOthers} />
     </Router>
   );
 }

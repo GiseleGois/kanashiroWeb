@@ -1,54 +1,33 @@
-/* style.css */
-
-table {
-  /* border-collapse: collapse; */
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
-  color: #333;
-  background-color: #7f7b7b76;
-}
-
-th,
-td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: left;
-}
-
-th.total-column,
-td.total-column {
-  background-color: green;
-  color: white;
-}
-
-th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-  text-align: left;
-}
-
-tr {
-  background-color: rgb(252, 250, 250) !important;
-}
-tr:hover {
-  background-color: #ddd;
-  border-top-color: #646464;
-}
-
-.container {
+.orders-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
-.table-container {
-  width: 48%;
+.orders-container div {
+  display: flex;
+  align-items: center;
 }
 
-.yellow-row {
-  background-color: yellow;
-}
-
-.total-column {
-  background-color: green;
+.orders-container button {
+  width: 300px;
+  height: 80px;
+  font-size: 24px;
+  border-radius: 20px;
+  background-color: #1D61DD;
   color: white;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20px;
 }
+
+.orders-container button svg {
+  width: 40px;
+  height: 40px;
+  margin-right: 20px;
+}
+
