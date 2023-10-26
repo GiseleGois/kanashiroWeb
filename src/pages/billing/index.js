@@ -93,75 +93,77 @@ function Billing() {
   return (
     <div className="container">
       <div className="table-card">
-        <h1 className="title">Pedidos feitos durante esta semana</h1>
-        <div>
-          <select value={searchUser} onChange={(e) => setSearchUser(e.target.value)}>
-            <option value="">Selecione um usuário</option>
-            {usernames.map((username) => (
-              <option key={username} value={username}>
-                {username}
-              </option>
-            ))}
-          </select>
-          <button onClick={filterOrdersByUser}>Pesquisar</button>
-        </div>
-        {isLoading ? (
-          <div className="loading-container">
-            <div className="spinner">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
+        <div class="lista-container">
+          <h1 className="title">Pedidos feitos durante esta semana</h1>
+          <div>
+            <select value={searchUser} onChange={(e) => setSearchUser(e.target.value)}>
+              <option value="">Selecione um usuário</option>
+              {usernames.map((username) => (
+                <option key={username} value={username}>
+                  {username}
+                </option>
+              ))}
+            </select>
+            <button onClick={filterOrdersByUser}></button>
           </div>
-        ) : (
-          filteredOrders.length === 0 ? (
-            <div>Não há nenhum pedido nos últimos 7 dias a ser exibido.</div>
+          {isLoading ? (
+            <div className="loading-container">
+              <div className="spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
           ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Usuário e local</th>
-                  <th>Pedido</th>
-                  <th>Valor</th>
-                  <th>Data</th>
-                  <th>Detalhe</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredOrders.map((order) => (
-                  <tr key={order.orderId}>
-                    <td>{order.userFullName}</td>
-                    <td>{order.orderId}</td>
-                    <td>{parseFloat(order.total).toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}</td>
-                    <td>{order.scheduled}</td>
-                    <td>
-                      <button className="view-button" onClick={() => handleShowOrderDetail(order.orderId)}>
-                        Visualizar pedido
-                      </button>
-                    </td>
+            filteredOrders.length === 0 ? (
+              <div>Não há nenhum pedido nos últimos 7 dias a ser exibido.</div>
+            ) : (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Usuário e local</th>
+                    <th>Pedido</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Detalhe</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )
-        )}
-        {isClientSelected && (
-          <button className="close-button" onClick={() => handleCloseInvoice(filteredOrders)}>
-            Fechar fatura
-          </button>
-        )}
+                </thead>
+                <tbody>
+                  {filteredOrders.map((order) => (
+                    <tr key={order.orderId}>
+                      <td>{order.userFullName}</td>
+                      <td>{order.orderId}</td>
+                      <td>{parseFloat(order.total).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}</td>
+                      <td>{order.scheduled}</td>
+                      <td>
+                        <button className="view-button" onClick={() => handleShowOrderDetail(order.orderId)}>
+                          Visualizar pedido
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )
+          )}
+          {isClientSelected && (
+            <button className="close-button" onClick={() => handleCloseInvoice(filteredOrders)}>
+              Fechar fatura
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

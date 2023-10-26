@@ -76,7 +76,7 @@ function BillingDetail() {
   };
 
   return (
-    <div className="container">
+    <div className="detail-container">
       <div className="content">
         <div className="detail-table-card">
           <h1 className="title">Detalhamento da fatura</h1>

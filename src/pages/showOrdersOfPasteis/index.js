@@ -8,6 +8,7 @@ function ShowOrdersOfPasteis() {
   const [resumeTotal, setResumeTotal] = useState([]);
   const [totalQuantitiesOfProducts, setTotalQuantitiesOfProducts] = useState({});
   const [totalQuantitiesOfPasteis, setTotalQuantitiesOfPasteis] = useState(0);
+  const [loadingProducts, setLoadingProducts] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -15,6 +16,7 @@ function ShowOrdersOfPasteis() {
         const productsData = await listProducts();
         productsData.sort((a, b) => a.priority - b.priority);
         setProducts(productsData);
+        setLoadingProducts(false);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -70,55 +72,59 @@ function ShowOrdersOfPasteis() {
 
   return (
     <div className="print-container">
-      <table className="print-table">
-        <thead>
-          <tr>
-            <th>Descrição</th>
-            {userFullNames.map(userFullName => (
-              <th key={userFullName}>{userFullName}</th>
-            ))}
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products
-            .filter(product => product.type !== 'salgado')
-            .map((product) => {
-              const productQuantities = userFullNames.map(userFullName =>
-                getItemQuantity(product.id, userFullName)
-              );
-              const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
+      {loadingProducts ? (
+        <div className="loading">Carregando produtos...</div>
+      ) : (
+        <table className="print-table">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              {userFullNames.map(userFullName => (
+                <th key={userFullName}>{userFullName}</th>
+              ))}
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products
+              .filter(product => product.type !== 'salgado')
+              .map((product) => {
+                const productQuantities = userFullNames.map(userFullName =>
+                  getItemQuantity(product.id, userFullName)
+                );
+                const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
 
-              const shouldHideRow = totalQuantity === 0 && productQuantities.every(qty => qty === '');
+                const shouldHideRow = totalQuantity === 0 && productQuantities.every(qty => qty === '');
 
-              const rowClassName = `product-row ${product.type === 'M' ? 'blue-row' : ''} ${product.type === 'D' ? 'yellow-row' : ''}`;
+                const rowClassName = `product-row ${product.type === 'M' ? 'blue-row' : ''} ${product.type === 'D' ? 'yellow-row' : ''}`;
 
-              if (shouldHideRow) {
-                return null;
-              }
+                if (shouldHideRow) {
+                  return null;
+                }
 
-              return (
-                <tr key={product.id} className={rowClassName}>
-                  <td>{product.name}</td>
-                  {userFullNames.map((userFullName, index) => (
-                    <td key={userFullName}>
-                      {productQuantities[index]}
+                return (
+                  <tr key={product.id} className={rowClassName}>
+                    <td>{product.name}</td>
+                    {userFullNames.map((userFullName, index) => (
+                      <td key={userFullName}>
+                        {productQuantities[index]}
+                      </td>
+                    ))}
+                    <td className='total-column'>
+                      {totalQuantity}
                     </td>
-                  ))}
-                  <td className='total-column'>
-                    {totalQuantity}
-                  </td>
-                </tr>
-              );
-            })}
-          <tr>
-            <td><strong>Total de pasteis</strong></td>
-            <td>
-              <strong>{totalQuantitiesOfPasteis}</strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                  </tr>
+                );
+              })}
+            <tr>
+              <td><strong>Total de pasteis</strong></td>
+              <td>
+                <strong>{totalQuantitiesOfPasteis}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

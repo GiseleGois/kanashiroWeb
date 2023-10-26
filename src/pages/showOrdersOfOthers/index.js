@@ -9,6 +9,7 @@ function ShowOrdersOfOthers() {
   const [totalQuantitiesOfProducts, setTotalQuantitiesOfProducts] = useState({});
   const [resumeTotalNonCoxinhaFamily, setResumeTotalNonCoxinhaFamily] = useState(0);
   const [resumeTotalCoxinhaFamily, setResumeTotalCoxinhaFamily] = useState(0);
+  const [loadingProducts, setLoadingProducts] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -17,6 +18,7 @@ function ShowOrdersOfOthers() {
         productsData.sort((a, b) => a.priority - b.priority);
         const salgadosProducts = productsData.filter(product => product.type === 'salgado');
         setProducts(salgadosProducts);
+        setLoadingProducts(false);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -79,64 +81,68 @@ function ShowOrdersOfOthers() {
 
   return (
     <div className="print-container">
-      <table className="print-table">
-        <thead>
-          <tr>
-            <th>Descrição</th>
-            {userFullNamesWithSalgados.map(userFullName => (
-              <th
-                className={userFullName.length > 20 ? 'small-font' : 'large-header'}
-                key={userFullName}
-              >
-                {userFullName}
-              </th>
-            ))}
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map(product => {
-            const productQuantities = userFullNamesWithSalgados.map(userFullName =>
-              getItemQuantity(product.id, userFullName)
-            );
-            const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
+      {loadingProducts ? (
+        <div className="loading">Carregando produtos...</div>
+      ) : (
+        <table className="print-table">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              {userFullNamesWithSalgados.map(userFullName => (
+                <th
+                  className={userFullName.length > 20 ? 'small-font' : 'large-header'}
+                  key={userFullName}
+                >
+                  {userFullName}
+                </th>
+              ))}
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map(product => {
+              const productQuantities = userFullNamesWithSalgados.map(userFullName =>
+                getItemQuantity(product.id, userFullName)
+              );
+              const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
 
-            const shouldHideRow = totalQuantity === 0 && productQuantities.every(qty => qty === '');
+              const shouldHideRow = totalQuantity === 0 && productQuantities.every(qty => qty === '');
 
-            const rowClassName = `product-row ${product.type === 'salgado' ? 'blue-row' : ''}`;
+              const rowClassName = `product-row ${product.type === 'salgado' ? 'blue-row' : ''}`;
 
-            if (shouldHideRow) {
-              return null;
-            }
+              if (shouldHideRow) {
+                return null;
+              }
 
-            return (
-              <tr key={product.id} className={rowClassName}>
-                <td>{product.name}</td>
-                {userFullNamesWithSalgados.map((userFullName, index) => (
-                  <td key={userFullName}>{productQuantities[index]}</td>
-                ))}
-                <td className='total-column'>{totalQuantity}</td>
-              </tr>
-            );
-          })}
-          <tr>
-            <td>
-              <strong>Total de salgados</strong>
-            </td>
-            <td>
-              <strong>{resumeTotalCoxinhaFamily}</strong>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>Total de Kibe</strong>
-            </td>
-            <td>
-              <strong>{resumeTotalNonCoxinhaFamily}</strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              return (
+                <tr key={product.id} className={rowClassName}>
+                  <td>{product.name}</td>
+                  {userFullNamesWithSalgados.map((userFullName, index) => (
+                    <td key={userFullName}>{productQuantities[index]}</td>
+                  ))}
+                  <td className='total-column'>{totalQuantity}</td>
+                </tr>
+              );
+            })}
+            <tr>
+              <td>
+                <strong>Total de salgados</strong>
+              </td>
+              <td>
+                <strong>{resumeTotalCoxinhaFamily}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Total de Kibe</strong>
+              </td>
+              <td>
+                <strong>{resumeTotalNonCoxinhaFamily}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      )}
     </div>
   );
 

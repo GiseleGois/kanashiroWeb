@@ -104,7 +104,7 @@ function CloseInvoice() {
 
 
   return (
-    <div className="container">
+    <div className="invoice-container">
       <div className="content">
         <div className="detail-table-card">
           <h1 className="title">Fechamento de fatura</h1>
