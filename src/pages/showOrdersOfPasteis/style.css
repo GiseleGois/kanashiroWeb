@@ -38,6 +38,13 @@
     background-color: #666;
   }
 
+.product-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
   table {
     margin: 0 auto;
     font-family: Arial, sans-serif;

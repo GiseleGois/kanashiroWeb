@@ -104,7 +104,7 @@ function ShowOrdersOfPasteis() {
 
                 return (
                   <tr key={product.id} className={rowClassName}>
-                    <td>{product.name}</td>
+                    <td className="product-name">{product.name}</td> {/* Apply product-name class here */}
                     {userFullNames.map((userFullName, index) => (
                       <td key={userFullName}>
                         {productQuantities[index]}
@@ -117,7 +117,9 @@ function ShowOrdersOfPasteis() {
                 );
               })}
             <tr>
-              <td><strong>Total de pasteis</strong></td>
+            <td className="product-name">
+              <strong>Total de pasteis</strong>
+              </td>
               <td>
                 <strong>{totalQuantitiesOfPasteis}</strong>
               </td>

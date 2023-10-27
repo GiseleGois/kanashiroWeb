@@ -87,7 +87,11 @@ function ShowOrdersOfOthers() {
         <table className="print-table">
           <thead>
             <tr>
-              <th>Descrição</th>
+              <th
+                className={`product-name-header ${products.map(product => product.name).join(' ').length > 10 ? 'small-font' : 'large-header'}`}
+              >
+                Descrição
+              </th>
               {userFullNamesWithSalgados.map(userFullName => (
                 <th
                   className={userFullName.length > 20 ? 'small-font' : 'large-header'}
@@ -107,7 +111,6 @@ function ShowOrdersOfOthers() {
               const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
 
               const shouldHideRow = totalQuantity === 0 && productQuantities.every(qty => qty === '');
-
               const rowClassName = `product-row ${product.type === 'salgado' ? 'blue-row' : ''}`;
 
               if (shouldHideRow) {
@@ -116,7 +119,9 @@ function ShowOrdersOfOthers() {
 
               return (
                 <tr key={product.id} className={rowClassName}>
-                  <td>{product.name}</td>
+                  <td key={product.id} className="product-name-cell">
+                    {product.name.split('/').slice(-1)[0]}
+                  </td>
                   {userFullNamesWithSalgados.map((userFullName, index) => (
                     <td key={userFullName}>{productQuantities[index]}</td>
                   ))}
@@ -125,18 +130,18 @@ function ShowOrdersOfOthers() {
               );
             })}
             <tr>
-              <td>
-                <strong>Total de salgados</strong>
+              <td className="product-name-cell">
+                <strong>Salgados</strong>
               </td>
-              <td>
+              <td className="total-column">
                 <strong>{resumeTotalCoxinhaFamily}</strong>
               </td>
             </tr>
             <tr>
-              <td>
-                <strong>Total de Kibe</strong>
+              <td className="product-name-cell">
+                <strong>Kibe</strong>
               </td>
-              <td>
+              <td className="total-column">
                 <strong>{resumeTotalNonCoxinhaFamily}</strong>
               </td>
             </tr>

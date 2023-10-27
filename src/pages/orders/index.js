@@ -16,19 +16,18 @@ function Orders() {
 
   return (
     <div className="orders-container">
-      <div>
-        <div>
+      <div className="button-container">
+        <div className="button">
           <File />
           <button onClick={handleShowPasteisClick}>Exibir pedidos de pasteis</button>
         </div>
-        <div>
+        <div className="button">
           <Droplet />
           <button onClick={handleShowOthersClick}>Exibir pedidos de salgados</button>
         </div>
       </div>
     </div>
   );
-
 }
 
 export default Orders;
