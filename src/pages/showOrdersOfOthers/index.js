@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { ArrowLeft } from 'react-feather';
 import './style.css';
 import { listProducts, listOrdersToExhibitInOrderPage } from '../../service';
 
 function ShowOrdersOfOthers() {
+  const history = useHistory();
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [resumeTotal, setResumeTotal] = useState([]);
@@ -10,6 +13,10 @@ function ShowOrdersOfOthers() {
   const [resumeTotalNonCoxinhaFamily, setResumeTotalNonCoxinhaFamily] = useState(0);
   const [resumeTotalCoxinhaFamily, setResumeTotalCoxinhaFamily] = useState(0);
   const [loadingProducts, setLoadingProducts] = useState(true);
+
+  const goBack = () => {
+    history.push('/orders');
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -146,6 +153,15 @@ function ShowOrdersOfOthers() {
               </td>
             </tr>
           </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan={userFullNames.length + 2}>
+                <button onClick={goBack} className="back-button">
+                  <ArrowLeft size={24} />
+                </button>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       )}
     </div>

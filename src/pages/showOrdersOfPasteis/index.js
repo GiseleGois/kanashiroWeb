@@ -77,68 +77,77 @@ function ShowOrdersOfPasteis() {
     return 0;
   };
 
-  // const backPage = () => {
-  //   history.push('/orders');
-  // };
+  const goBack = () => {
+    history.push('/orders');
+  };
 
   const userFullNames = [...new Set(orders.map(order => order.userFullName))];
   userFullNames.sort((a, b) => a.localeCompare(b));
 
-const shouldDisplayOrder = (order) => {
-  return order.items.some((item) => products.find((product) => product.id === item.productId && product.type !== 'salgado'));
-};
+  const shouldDisplayOrder = (order) => {
+    return order.items.some((item) => products.find((product) => product.id === item.productId && product.type !== 'salgado'));
+  };
 
-return (
-  <div className="print-container">
-    {loadingProducts ? (
-      <div className="loading">Carregando produtos...</div>
-    ) : (
-      <table className="print-table">
-        <thead>
-          <tr>
-            <th>Descrição</th>
-            {userFullNames.map((userFullName) => (
-              <th key={userFullName}>{userFullName}</th>
-            ))}
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products
-            .filter((product) => {
-              return orders.some((order) => shouldDisplayOrder(order) && getItemQuantity(product.id, order.userFullName) > 0);
-            })
-            .map((product) => {
-              const productQuantities = userFullNames.map((userFullName) =>
-                getItemQuantity(product.id, userFullName)
-              );
-              const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
+  return (
+    <div className="print-container">
+      {loadingProducts ? (
+        <div className="loading">Carregando produtos...</div>
+      ) : (
+        <table className="print-table">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              {userFullNames.map((userFullName) => (
+                <th key={userFullName}>{userFullName}</th>
+              ))}
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products
+              .filter((product) => {
+                return orders.some((order) => shouldDisplayOrder(order) && getItemQuantity(product.id, order.userFullName) > 0);
+              })
+              .map((product) => {
+                const productQuantities = userFullNames.map((userFullName) =>
+                  getItemQuantity(product.id, userFullName)
+                );
+                const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
 
-              const rowClassName = `product-row ${product.type === 'M' ? 'blue-row' : ''} ${product.type === 'D' ? 'yellow-row' : ''}`;
+                const rowClassName = `product-row ${product.type === 'M' ? 'blue-row' : ''} ${product.type === 'D' ? 'yellow-row' : ''}`;
 
-              return (
-                <tr key={product.id} className={rowClassName}>
-                  <td className="product-name">{product.name}</td>
-                  {userFullNames.map((userFullName, index) => (
-                    <td key={userFullName}>{productQuantities[index]}</td>
-                  ))}
-                  <td className="total-column">{totalQuantity}</td>
-                </tr>
-              );
-            })}
-          <tr>
-            <td className="product-name">
-              <strong>Total de pasteis</strong>
-            </td>
-            <td>
-              <strong>{totalQuantitiesOfPasteis}</strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    )}
-  </div>
-);
+                return (
+                  <tr key={product.id} className={rowClassName}>
+                    <td className="product-name">{product.name}</td>
+                    {userFullNames.map((userFullName, index) => (
+                      <td key={userFullName}>{productQuantities[index]}</td>
+                    ))}
+                    <td className="total-column">{totalQuantity}</td>
+                  </tr>
+                );
+              })}
+            <tr>
+              <td className="product-name">
+                <strong>Total de pasteis</strong>
+              </td>
+              <td>
+                <strong>{totalQuantitiesOfPasteis}</strong>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan={userFullNames.length + 2}>
+                <button onClick={goBack} className="back-button">
+                  <ArrowLeft size={24} />
+                </button>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      )}
+    </div>
+  );
 }
 
 export default ShowOrdersOfPasteis;

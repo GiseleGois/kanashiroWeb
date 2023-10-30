@@ -29,6 +29,8 @@
   .product-name-cell {
     max-width: 200px;
     white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
 
