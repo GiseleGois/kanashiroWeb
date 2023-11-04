@@ -114,7 +114,17 @@ function ShowOrdersOfPasteis() {
                 );
                 const totalQuantity = totalQuantitiesOfProducts[product.id] || 0;
 
-                const rowClassName = `product-row ${product.type === 'M' ? 'blue-row' : ''} ${product.type === 'D' ? 'yellow-row' : ''}`;
+                const rowClassName = `product-row
+                ${product.type === 'M' ? 'blue-row' : ''}
+                ${product.type === 'D' ? 'yellow-row' : ''}
+                ${product.family === '1' ? 'salmon-row' : ''}
+                ${product.family === '2' ? 'light-blue-row' : ''}
+                ${product.family === '3' ? 'g-row' : ''}
+                ${product.family === '4' ? 'c-row' : ''}
+                ${product.family === '5' ? 'd-row' : ''}
+                ${product.family === '6' ? 'e-row' : ''}
+                ${product.family === '7' ? 'f-row' : ''}
+                `;
 
                 return (
                   <tr key={product.id} className={rowClassName}>

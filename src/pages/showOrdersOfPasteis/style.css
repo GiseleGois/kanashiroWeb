@@ -92,6 +92,34 @@
     color: white;
   }
 
+  .salmon-row {
+    background-color: #ffb6af;
+  }
+
+  .light-blue-row {
+    background-color: #b2dafa;
+  }
+
+  .g-row {
+    background-color: #b0f2c2;
+  }
+
+  .c-row {
+    background-color: #dfcae1;
+  }
+
+  .d-row {
+    background-color: #D8BFD8;
+  }
+
+  .e-row {
+    background-color: #B0E0E6;
+  }
+
+  .f-row {
+    background-color: #B0E0E6;
+  }
+
   .total-column {
     background-color: green;
     color: white;
