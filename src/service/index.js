@@ -1,9 +1,16 @@
 import axios from "axios";
 import config from '../config';
 
-const ordersThisWeek = async () => {
+const ordersThisWeek = async (startDate, endDate) => {
   try {
-    const { data } = await axios.get(`${config.url}/v2/orders`);
+    const endDateTime = new Date(endDate)
+    endDateTime.setHours(23, 59, 59, 999);
+    const endDateISO = endDateTime.toISOString();
+
+    const { data } = await axios.get(`${config.url}/v2/orders`, {
+      params: { startDate, endDate: endDateISO },
+    });
+    console.log('orders:', data);
     return data;
   } catch (error) {
     throw new Error('Failed to retrieve orders');

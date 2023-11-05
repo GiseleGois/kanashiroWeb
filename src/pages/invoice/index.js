@@ -27,7 +27,7 @@ function CloseInvoice() {
     setIsLoading(true);
 
     if (!invoiceId) {
-      history.push('/billing');
+      history.push('/new-billing');
       return;
     }
 
@@ -41,12 +41,12 @@ function CloseInvoice() {
   };
 
   const handleGoBackToBillingPage = () => {
-    history.push('/billing');
+    history.push('/new-billing');
   };
 
   const handleGetUserData = (userId) => {
     if (!userId) {
-      history.push('/billing');
+      history.push('/new-billing');
       return;
     }
 
@@ -62,7 +62,7 @@ function CloseInvoice() {
 
   const handleGetUser = () => {
     if (!invoice.length) {
-      history.push('/billing');
+      history.push('/new-billing');
       return;
     }
 
@@ -94,7 +94,7 @@ function CloseInvoice() {
       .then(() => {
         alert('A cobrança foi enviada');
         setIsSendingInvoice(false);
-        history.push('/billing');
+        history.push('/new-billing');
       })
       .catch((error) => {
         setIsSendingInvoice(false);

@@ -41,7 +41,7 @@ function BillingDetail() {
     setIsLoading(true);
 
     if (!orderId) {
-      history.push('/billing');
+      history.push('/new-billing');
       return;
     }
 
@@ -58,7 +58,7 @@ function BillingDetail() {
   };
 
   const handleGoBackToBillingPage = () => {
-    history.push('/billing');
+    history.push('/new-billing');
   };
 
   const downloadCSV = () => {

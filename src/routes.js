@@ -8,7 +8,7 @@ import Register from './pages/register';
 import Products from './pages/products';
 import ManagementUsers from './pages/manageUsers';
 import UpdateOrder from './pages/update-order';
-import Billing from './pages/billing';
+import newBilling from './pages/newBilling';
 import BillingDetail from './pages/billingDetail';
 import CloseInvoice from './pages/invoice';
 import ShowOrdersOfPasteis from './pages/showOrdersOfPasteis';
@@ -24,7 +24,7 @@ function Routes() {
       <Route path='/products' component={Products} />
       <Route path='/management-users' component={ManagementUsers} />
       <Route path='/update-order' component={UpdateOrder} />
-      <Route path='/billing' component={Billing}/>
+      <Route path='/new-billing' component={newBilling}/>
       <Route path='/billing-detail' component={BillingDetail} />
       <Route path='/invoice' component={CloseInvoice} />
       <Route path='/show-orders-of-pasteis' component={ShowOrdersOfPasteis} />
