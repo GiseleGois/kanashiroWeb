@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import './style.css';
 import { ordersThisWeek, closeInvoice } from '../../service';
-import Calendar from '../../components/billingCalendar';
+import Calendar from '../../components/calendar';
 import Moment from 'moment';
 import 'moment/locale/pt-br';
 
