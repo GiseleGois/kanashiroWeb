@@ -1,11 +1,7 @@
-/* style.css */
-
-/* Dentro do seu arquivo style.css */
-
 .print-container {
     display: flex;
     justify-content: space-between;
-    width: 210mm; /* Largura da página A4 */
+    width: 100%;
     margin: 0 auto;
     font-family: Arial, sans-serif;
     background-color: #eeebeb76;
@@ -22,7 +18,7 @@
   .print-table td {
     border: 1px solid #666;
     padding: 8px;
-    text-align: left;
+    text-align: center;
     white-space: nowrap;
   }
 
@@ -30,7 +26,6 @@
     max-width: 200px;
     white-space: normal;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
 
 
@@ -56,7 +51,7 @@
   td {
     border: 1px solid #666;
     padding: 8px;
-    text-align: left;
+    text-align: center;
   }
 
   th.total-column,
@@ -68,7 +63,7 @@
   th {
     background-color: #f2f2f2;
     font-weight: bold;
-    text-align: left;
+    text-align: center;
   }
 
   tr:hover {
