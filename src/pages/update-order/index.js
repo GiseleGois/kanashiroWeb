@@ -5,7 +5,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './style.css';
 import Select from 'react-select';
-import { listOrders, removeItem, insertItem, listProductsToUpdateOrders, checkUserPermission } from '../../service';
+import { listOrders, removeItem, insertItem, listProductsToUpdateOrders } from '../../service';
+import Modal from '../../commons/modal/genericModal';
 
 export default function UpdateOrder() {
   const [startDate, setStartDate] = useState(null);
@@ -23,28 +24,7 @@ export default function UpdateOrder() {
   const datePickerRef = useRef(null);
   const selectRef = useRef(null);
   const [quantityMissing, setQuantityMissing] = useState(false);
-  const [hasAccess, setHasAccess] = useState(null);
-  const history = useHistory();
-
-  useEffect(() => {
-    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-      checkUserPermission(user.uid)
-        .then((response) => {
-          if (response.hasAccess === true) {
-            setHasAccess(true);
-          } else {
-            setHasAccess(false);
-          }
-        })
-        .catch((error) => {
-          console.error('Error checking user permission:', error);
-          history.push('/home');
-          setHasAccess(false);
-        });
-    });
-
-    return () => unsubscribeAuth();
-  }, [history]);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleDateChange = (dates) => {
     const [start, end] = dates;
@@ -102,7 +82,8 @@ export default function UpdateOrder() {
     setNewItem({ selectedService: null, quantity: '' });
 
     await insertItem(orderId, productId, quantity);
-    fetchUpdatedOrderData(startDate, endDate); // Fetch updated order data
+    fetchUpdatedOrderData(startDate, endDate);
+    setShowSuccessModal(true);
   };
 
   const handleRemoveItem = async (productId, orderId) => {
@@ -116,6 +97,7 @@ export default function UpdateOrder() {
       await removeItem(orderId, removedItem.productId);
 
       fetchUpdatedOrderData(startDate, endDate);
+      setShowSuccessModal(true);
     }
   };
 
@@ -303,6 +285,17 @@ export default function UpdateOrder() {
             </div>
           </div>
         </div>
+      )}
+
+      {showSuccessModal && (
+        <Modal
+          title="Sucesso"
+          message="Pedido alterado com sucesso"
+          onClose={() => {
+            setShowSuccessModal(false);
+            setShowModal(false);
+          }}
+        />
       )}
     </div>
   );

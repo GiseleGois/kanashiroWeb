@@ -84,7 +84,7 @@ function Home() {
             <div className="card-content">
               <h3>Editar pedidos</h3>
               <p>Visualize os detalhes do pedido e edite caso necessário.</p>
-              <button onClick={handleUpdateOrder} disabled={!hasAccess || loading}>Exibir</button>
+              <button onClick={handleUpdateOrder}>Exibir</button>
             </div>
           </div>
 
