@@ -87,16 +87,14 @@ function ShowOrdersOfOthers() {
   userFullNamesWithSalgados.sort((a, b) => a.localeCompare(b));
 
   return (
-    <div className="print-container">
+    <div className="salgado-container">
       {loadingProducts ? (
         <div className="loading">Carregando produtos...</div>
       ) : (
-        <table className="print-table">
+        <table className="salgado-table">
           <thead>
             <tr>
-              <th
-                className={`product-name-header ${products.map(product => product.name).join(' ').length > 10 ? 'small-font' : 'large-header'}`}
-              >
+              <th className={`product-name-header ${products.map(product => product.name).join(' ').length > 10 ? 'small-font' : 'large-header'}`}>
                 Descrição
               </th>
               {userFullNamesWithSalgados.map(userFullName => (

@@ -35,6 +35,10 @@
     background-color: #f2f2f2;
   }
 
+  .detail-table-card tr:hover {
+    background-color: #8dcdea;
+  }
+
   .buttons-container {
     display: flex;
     justify-content: center;

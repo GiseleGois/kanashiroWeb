@@ -1,56 +1,66 @@
-.print-container {
+.pastel-container {
   display: flex;
   justify-content: space-between;
-  width: 100%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
-  background-color: #eeebeb76;
+  position: relative;
 }
 
-.print-table {
+.pastel-table {
   width: 100%;
   font-size: 10px;
   border-collapse: collapse;
-  table-layout: fixed;
 }
 
-.print-table th,
-.print-table td {
-  border: 1px solid #666;
+.description-column {
+  left: 0;
+  width: 150px;
+}
+
+.pastel-table th:first-child,
+.pastel-table td:first-child {
+  position: sticky;
+  left: 0;
+  background-color: #f2f2f2;
+  z-index: 2;
+}
+
+.pastel-table-container {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: scroll;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  overflow-x: scroll;
+}
+
+.pastel-table th,
+.pastel-table td {
+  border: 1px solid #0a0a0a;
   padding: 8px;
   text-align: center;
   white-space: nowrap;
+  word-wrap: break-word;
 }
 
-.print-table th {
+.pastel-table th {
   background-color: #f2f2f2;
   font-weight: bold;
-  white-space: normal;
-  word-wrap: break-word;
-  max-width: 200px;
 }
 
-.print-table tr:hover {
-  background-color: #666;
+.pastel-table tr:hover {
+  background-color: #8dcdea;
 }
 
 .product-name {
   white-space: nowrap;
   overflow: hidden;
   max-width: 150px;
-}
-
-table {
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
-  background-color: #eeebeb76;
-}
-
-th,
-td {
-  border: 1px solid #666;
-  padding: 8px;
-  text-align: center;
+  word-wrap: break-word;
 }
 
 th.total-column,
@@ -62,11 +72,6 @@ td.total-column {
 th {
   background-color: #f2f2f2;
   font-weight: bold;
-  text-align: center;
-}
-
-tr:hover {
-  background-color: #666;
 }
 
 .container {
@@ -104,20 +109,21 @@ tr:hover {
 }
 
 .d-row {
-  background-color: #D8BFD8;
+  background-color: #d8bfd8;
 }
 
 .e-row {
-  background-color: #B0E0E6;
+  background-color: #b0e0e6;
 }
 
 .f-row {
-  background-color: #B0E0E6;
+  background-color: #b0e0e6;
 }
 
 .total-column {
   background-color: green;
   color: white;
+  padding: 4px;
 }
 
 .back-button {
@@ -131,4 +137,42 @@ tr:hover {
 
 .back-button:hover {
   background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .pastel-table {
+    font-size: 14px;
+  }
+
+  .pastel-table th,
+  .pastel-table td {
+    padding: 6px;
+    white-space: normal;
+  }
+
+  .pastel-table-container {
+    max-height: none;
+    overflow-y: auto;
+  }
+
+  .sticky-header {
+    overflow-x: auto;
+  }
+
+  .description-column,
+  .pastel-table th:first-child,
+  .pastel-table td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #f2f2f2;
+    z-index: 2;
+  }
+
+  .pastel-container {
+    flex-direction: column;
+  }
+
+  .table-container {
+    width: 100%;
+  }
 }
