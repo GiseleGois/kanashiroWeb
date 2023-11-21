@@ -1,0 +1,146 @@
+.salgado-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+.salgado-table {
+  width: 100%;
+  font-size: 10px;
+  border-collapse: collapse;
+}
+
+.description-column {
+  left: 0;
+  background-color: #f2f2f2;
+  width: 150px;
+}
+
+.salgado-table th:first-child,
+.salgado-table td:first-child {
+  position: sticky;
+  left: 0;
+  background-color: #f2f2f2;
+  color: #0c0b0b;
+  z-index: 2;
+}
+
+.salgado-table th,
+.salgado-table td {
+  border: 1px solid #ddd;
+}
+
+.salgado-table-container {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: scroll;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  overflow-x: scroll;
+}
+
+.salgado-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.salgado-table tr:hover {
+  background-color: #8dcdea;
+}
+
+.product-name-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 150px;
+  word-wrap: break-word;
+}
+
+th.total-column,
+td.total-column {
+  background-color: rgb(5, 175, 5);
+  color: white;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+table {
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.table-container {
+  width: 48%;
+}
+
+.yellow-row {
+  background-color: yellow;
+}
+
+.green-row {
+  background-color: green;
+  color: white;
+}
+
+.blue-row {
+  background-color: rgba(5, 102, 193, 0.425);
+  color: white;
+}
+
+.total-column {
+  background-color: green;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .salgado-table {
+    font-size: 14px;
+  }
+
+  .salgado-table th,
+  .salgado-table td {
+    padding: 6px;
+    white-space: normal;
+  }
+
+  .salgado-table-container {
+    max-height: none;
+    overflow-y: auto;
+  }
+
+  .sticky-header {
+    overflow-x: auto;
+  }
+
+  .description-column,
+  .salgado-table th:first-child,
+  .salgado-table td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #f2f2f2;
+    color: #0c0b0b;
+    z-index: 2;
+  }
+
+  .salgado-container {
+    flex-direction: column;
+  }
+
+  .table-container {
+    width: 100%;
+  }
+}

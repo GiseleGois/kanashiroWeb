@@ -1,169 +1,88 @@
-body {
-  background-color: #f2f2f2;
-  color: #343434;
-  font-weight: 500;
-  display: flex;
-  min-height: 100vh;
-  min-width: 100vw;
-}
-
-main {
-  width: 50vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-main h1 {
-  color: #343434;
-  font-size: 3rem;
-  margin-bottom: 3rem;
-  text-align: center;
-}
-
-main.social-media {
-  display: flex;
-  align-content: center;
-}
-
-main .social-media a {
-  text-decoration: none;
-}
-
-main .social-media img {
-  width: 36px;
-  margin-left: 3rem;
-}
-
-main .social-media a:first-child img {
-  margin-left: 0;
-}
-
-main .alternative {
-  margin-top: 1rem;
-}
-
-main .alternative span {
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.3);
-  position: relative;
-}
-
-main .alternative span::before, main .alternative span::after {
+.blur-bg {
   position: absolute;
-  content: '';
-  height: 1px;
-  width: 100px;
-  bottom: 50%;
-  right: 50px;
-  background: rgba(255, 255, 255, 0.3);
-}
-
-main .alternative span::after {
-  left: 50px;
-}
-
-main form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-main form label {
-  display: flex;
-  flex-direction: column;
-}
-
-main form label span {
-  font-size:  1.1rem;
-  margin-top: 2rem;
-}
-
-main form input {
-  background: #f2f2f2;
-  width: 300px;
-  height: 50px;
-  padding: 0 0.5rem;
-  margin-top: 1rem;
-  outline: none;
-  color: #040B18;
-  font-size: 1rem;
-  border: 1px solid #040B18;
-  border-radius: 8px;
-}
-
-main form input[type="submit"] {
-  cursor: pointer;
-  width: 50%;
-  margin-top: 4rem;
-  border: none;
-  border-radius: 32px;
-  background: #9c0000;
-  color: white;
-  font-size: 1.1rem;
-  transition: all .3s ease-in-out;
-}
-
-main form input[type="submit"]:hover {
-  background: #eb0808;
-}
-
-section.images {
-  width: 50vw;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: 4rem;
-}
-
-section.images img {
-  width: 100%;
-}
-
-section.images .circle {
-  position: absolute;
-  height: 100%;
-  width: 100%;
   top: 0;
   left: 0;
-  background: linear-gradient(45deg, #E8CBC0, #636FA4);
-  clip-path: circle(40% at right 80%);
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/340597.jpg');
+  background-size: cover;
+  background-position: center;
   z-index: -1;
 }
 
-@media only screen and (min-width: 900px) and (mas-width: 1200px) {
- section.images img {
-     width: 110%;
- }
-
- section.images .circle {
-     clip-path: circle(35% at right 80%);
- }
+.login-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-@media only screen and (max-width: 900px) {
-  section.images {
-      display: none;
-      visibility: hidden;
-  }
-
-  main {
-      width: 100vw;
-  }
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-@media only screen and (max-width: 450px) {
-  main h1 {
-      font-size: 2rem;
+.login-card {
+  background-color: rgba(255, 255, 255, 0.167);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
+  padding: 4rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3rem;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.input-field {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.btn-submit {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  background-color: #9c0000;
+  color: #fff;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+}
+
+/* Regras de mídia para telas menores */
+@media screen and (max-width: 768px) {
+  .input-field,
+  .btn-submit {
+    width: 100%;
   }
 
-  main .alternative span {
-      font-size: 0.8rem;
+  .input-field {
+    font-size: 14px;
+    padding: 0.25rem;
   }
 
-  main form label span, main form input[type="submit"] {
-      font-size: 1rem;
+  .btn-submit {
+    font-size: 14px;
+    padding: 0.25rem;
   }
 }

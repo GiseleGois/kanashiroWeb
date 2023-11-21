@@ -1,37 +1,39 @@
 import React from 'react';
-import banner from '../../assets/kanashiro.png'
-
+import { auth } from '../../firebase';
+import { useHistory } from 'react-router-dom';
 import './style.css';
 
-export default function Login() {
+function Login() {
+  const history = useHistory();
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      history.push('/home');
+    } catch (error) {
+      alert('Erro durante o login: ' + error.message);
+    }
+  };
 
   return (
-<body>
-    <main>
-        <h1>Login</h1>
-
-        <div class="alternative">
+    <div className="blur-bg">
+      <div className="login-container">
+        <div className="login-card">
+          <h2 className="title-field">Bem vindo(a)</h2>
+          <form onSubmit={handleLogin}>
+            <input type="email" id="email" name="email" className="input-field" placeholder='Digite seu email' />
+            <input type="password" id="password" name="password" className="input-field" placeholder='Digite sua senha' />
+            <button type="submit" className="btn-submit">Entrar</button>
+          </form>
         </div>
-
-        <form action="">
-
-            <label for="text">
-                <span>Usuario</span>
-                <input type="text" id="text" name="text"/>
-            </label>
-            <label for="password">
-                <span>Senha</span>
-                <input type="password" id="password" name="password"/>
-            </label>
-
-            <input type="submit" value="Sign Up"/>
-        </form>
-    </main>
-
-    <section class="images">
-        <img src={banner} alt="logo"/>
-        <div class="circle"></div>
-    </section>
-</body>
+      </div>
+    </div>
   );
 }
+
+export default Login;
