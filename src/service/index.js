@@ -46,6 +46,15 @@ const getInvoicesByInvoiceId = async (invoiceId) => {
   }
 };
 
+const getAllOverdueInvoices = async () => {
+  try {
+    const { data } = await axios.get(`${config.url}/get-all-invoices`);
+    return data;
+  } catch (error) {
+    throw new Error('Fail to get all invoices');
+  }
+};
+
 const listProductsToUpdateOrders = async () => {
   try {
     const { data } = await axios.get(`${config.url}/fetch-product-type`);
@@ -240,7 +249,7 @@ const sendInvoiceToUser = async (phone, invoiceData) => {
       time_typing: 1,
     };
 
-    const { data } = await instance.post(`/api/v1/whatsapp/sendText`, payload);
+    const { data } = await instance.post(`/api/v2/whatsapp/sendText`, payload);
     return data;
   } catch (error) {
     throw new Error('Falha ao obter todos os produtos');
@@ -252,6 +261,7 @@ export {
   fetchOrderById,
   closeInvoice,
   getInvoicesByInvoiceId,
+  getAllOverdueInvoices,
   listProductsToUpdateOrders,
   insertItem,
   removeItem,
