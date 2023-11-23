@@ -3,8 +3,11 @@
   text-align: center;
 }
 
-.checkInvoices-container h1 {
+.checkInvoices-container {
   text-align: center;
+}
+
+h1 {
   margin-bottom: 20px;
   font-size: 24px;
 }
@@ -17,7 +20,12 @@
   margin-top: 20px;
 }
 
-.invoice-manager-list > div {
+.user-invoices-container {
+  display: flex;
+  gap: 10px;
+}
+
+.invoice-manager-list>div {
   margin-bottom: 20px;
 }
 
@@ -28,7 +36,7 @@
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 400px;
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
@@ -118,4 +126,28 @@
 
 .close-icon:hover {
   color: #555;
+}
+
+@media only screen and (max-width: 768px) {
+
+  .invoice-manager-card {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .user-invoices-container {
+    flex-direction: column;
+  }
+
+  .invoice-manager-list {
+    gap: 10px;
+  }
+
+  .management-invoice-modal {
+    padding: 10px;
+  }
+
+  .invoice-manager-modal-content {
+    width: 100%;
+  }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Droplet, File } from 'react-feather';
+import { Droplet, File, Home, Package } from 'react-feather';
 import './style.css';
 
 function Orders() {
@@ -14,6 +14,14 @@ function Orders() {
     history.push('/show-orders-of-others');
   };
 
+  const handleShowRetro = () => {
+    history.push('/retro');
+  };
+
+  const handleBackToHome = () => {
+    history.push('/home');
+  };
+
   return (
     <div className="orders-container">
       <div className="button-container">
@@ -24,6 +32,10 @@ function Orders() {
         <div className="button">
           <Droplet />
           <button onClick={handleShowOthersClick}>Exibir pedidos de salgados</button>
+        </div>
+        <div className="button">
+          <Home />
+          <button onClick={handleBackToHome}>Pagina Inicial</button>
         </div>
       </div>
     </div>

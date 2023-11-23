@@ -55,6 +55,33 @@ const getAllOverdueInvoices = async () => {
   }
 };
 
+const updateInvoiceStatus = async (invoiceId, paid) => {
+  try {
+    const { data } = await axios.put(`${config.url}/update-invoice?invoiceId=${invoiceId}&paid=${paid}`);
+    return data;
+  } catch (error) {
+    throw new Error('Fail to update this invoice');
+  }
+};
+
+const paymentInvoice = async (invoiceId, value) => {
+  try {
+    const { data } = await axios.put(`${config.url}/payment-invoice?invoiceId=${invoiceId}&value=${value}`);
+    return data;
+  } catch (error) {
+    throw new Error('Fail to pay this invoice');
+  }
+};
+
+const resumeInvoices = async () => {
+  try {
+    const { data } = await axios.get(`${config.url}/resume`);
+    return data;
+  } catch (error) {
+    throw new Error('Fail to get all invoices');
+  }
+};
+
 const listProductsToUpdateOrders = async () => {
   try {
     const { data } = await axios.get(`${config.url}/fetch-product-type`);
@@ -262,6 +289,9 @@ export {
   closeInvoice,
   getInvoicesByInvoiceId,
   getAllOverdueInvoices,
+  updateInvoiceStatus,
+  paymentInvoice,
+  resumeInvoices,
   listProductsToUpdateOrders,
   insertItem,
   removeItem,

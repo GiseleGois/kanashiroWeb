@@ -11,12 +11,14 @@ import UpdateOrder from './pages/update-order';
 import newBilling from './pages/newBilling';
 import BillingOptions from './pages/billingOptions';
 import CheckInvoices from './pages/checkInvoices';
-import PaymentInvoice from './pages/paymentInvoice';
 import ConsolidatedInvoice from './pages/consolidatedInvoice';
 import BillingDetail from './pages/billingDetail';
 import CloseInvoice from './pages/invoice';
 import ShowOrdersOfPasteis from './pages/showOrdersOfPasteis';
 import ShowOrdersOfOthers from './pages/showOrdersOfOthers';
+
+import PaymentInvoice from './components/paymentInvoice';
+import UpdateInvoice from './components/updateInvoice';
 
 function Routes() {
   return (
@@ -31,12 +33,15 @@ function Routes() {
       <Route path='/new-billing' component={newBilling}/>
       <Route path='/billing' component={BillingOptions}/>
       <Route path='/check-invoices' component={CheckInvoices}/>
-      <Route path='/payment-invoice' component={PaymentInvoice}/>
       <Route path='/consolidated-invoice' component={ConsolidatedInvoice}/>
       <Route path='/billing-detail' component={BillingDetail} />
       <Route path='/invoice' component={CloseInvoice} />
       <Route path='/show-orders-of-pasteis' component={ShowOrdersOfPasteis} />
       <Route path='/show-orders-of-others' component={ShowOrdersOfOthers} />
+
+      <Route path='/payment' component={PaymentInvoice} />
+      <Route path='/update' component={UpdateInvoice} />
+
     </Router>
   );
 }

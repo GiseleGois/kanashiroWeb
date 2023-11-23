@@ -44,7 +44,7 @@ function Home() {
   };
 
   const handleBilling = () => {
-    history.push('/new-billing');
+    history.push('/billing');
   };
 
   const handleProducts = () => {

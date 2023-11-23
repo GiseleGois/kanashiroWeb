@@ -1,0 +1,29 @@
+.consolidatedInvoice-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+hr {
+    border: 1px solid #ddd;
+}
+
+p {
+    margin: 10px 0;
+}
+
+.selected-card {
+    border: 2px solid #8a05be; /* Cor da borda ao selecionar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave ao selecionar */
+    transition: border 0.3s ease, box-shadow 0.3s ease; /* Transição suave da cor da borda e da sombra */
+    cursor: pointer; /* Mostra que o elemento é clicável */
+  }
+
+  .selected-card:hover {
+    border: 2px solid #8a05be; /* Cor da borda ao passar o mouse */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra suave ao passar o mouse */
+  }

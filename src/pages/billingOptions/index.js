@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { BarChart2, Trello, DollarSign, Home, FileText } from 'react-feather';
+import React, { useRef } from 'react';
+import { BarChart2, Trello, Home, FileText } from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import './style.css';
 // import { checkUserPermission } from '../../service';
@@ -20,10 +20,6 @@ function BillingOptions() {
 
   const handleCheckInvoices = () => {
     history.push('/check-invoices');
-  };
-
-  const handleUpdateInvoice = () => {
-    history.push('/payment-invoice');
   };
 
   const handleConsolidatedInvoice = () => {
@@ -52,15 +48,6 @@ function BillingOptions() {
               <h3>Exibir as faturas pendentes</h3>
               <p>Visualize todos os usuarios com faturas pendentes.</p>
               <button onClick={handleCheckInvoices}>Exibir</button>
-            </div>
-          </div>
-
-          <div className="card">
-            <DollarSign />
-            <div className="card-content">
-              <h3>Atualizar divida do usuario</h3>
-              <p>Pagamento de uma porcentagem da divida.</p>
-              <button onClick={handleUpdateInvoice}>Exibir</button>
             </div>
           </div>
 
