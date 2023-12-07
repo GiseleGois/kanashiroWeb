@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { registerLocale } from 'react-datepicker';
+import ptBR from 'date-fns/locale/pt-BR';
 import './style.css';
 
 function Calendar({ onDateChange, onSearch }) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const datePickerRef = useRef(null);
+
+  useEffect(() => {
+    registerLocale('pt-BR', ptBR);
+  }, []);
 
   const handleDateChange = (dates) => {
     const [start, end] = dates;
@@ -33,6 +39,7 @@ function Calendar({ onDateChange, onSearch }) {
         endDate={endDate}
         selectsRange
         inline
+        locale={ptBR}
         ref={datePickerRef}
       />
       {startDate && endDate && (
@@ -40,7 +47,7 @@ function Calendar({ onDateChange, onSearch }) {
           Limpar
         </button>
       )}
-            {startDate && endDate && (
+      {startDate && endDate && (
         <button type="button" onClick={onSearch} className="search-button">
           Pesquisar
         </button>

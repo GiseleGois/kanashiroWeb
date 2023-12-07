@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Droplet, File, Home, Package } from 'react-feather';
+import Calendar from '../../components/calendar';
 import './style.css';
 
 function Orders() {
@@ -15,7 +16,7 @@ function Orders() {
   };
 
   const handleShowRetro = () => {
-    history.push('/retro');
+    history.push('/retroactive-orders');
   };
 
   const handleBackToHome = () => {
@@ -32,6 +33,10 @@ function Orders() {
         <div className="button">
           <Droplet />
           <button onClick={handleShowOthersClick}>Exibir pedidos de salgados</button>
+        </div>
+        <div className="button">
+          <Package />
+          <button onClick={handleShowRetro}>Retroativos</button>
         </div>
         <div className="button">
           <Home />

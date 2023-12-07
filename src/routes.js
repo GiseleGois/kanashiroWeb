@@ -17,6 +17,10 @@ import CloseInvoice from './pages/invoice';
 import ShowOrdersOfPasteis from './pages/showOrdersOfPasteis';
 import ShowOrdersOfOthers from './pages/showOrdersOfOthers';
 
+import RetroOrders from './pages/retroactiveOrders';
+import RetroOrdersOfPasteis from './pages/retroOrdersOfPasteis';
+import RetroOrdersOfOthers from './pages/retroOrdersOfOthers';
+
 import PaymentInvoice from './components/paymentInvoice';
 import UpdateInvoice from './components/updateInvoice';
 
@@ -38,6 +42,10 @@ function Routes() {
       <Route path='/invoice' component={CloseInvoice} />
       <Route path='/show-orders-of-pasteis' component={ShowOrdersOfPasteis} />
       <Route path='/show-orders-of-others' component={ShowOrdersOfOthers} />
+
+      <Route path='/retroactive-orders' component={RetroOrders} />
+      <Route path='/retro-orders-of-pasteis' component={RetroOrdersOfPasteis} />
+      <Route path='/retro-orders-of-others' component={RetroOrdersOfOthers} />
 
       <Route path='/payment' component={PaymentInvoice} />
       <Route path='/update' component={UpdateInvoice} />
