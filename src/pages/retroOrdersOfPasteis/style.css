@@ -1,4 +1,4 @@
-.pastel-container {
+.retro-pastel-container {
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
@@ -6,7 +6,7 @@
   position: relative;
 }
 
-.pastel-table {
+.retro-pastel-table {
   width: 100%;
   font-size: 10px;
   border-collapse: collapse;
@@ -17,15 +17,15 @@
   width: 150px;
 }
 
-.pastel-table th:first-child,
-.pastel-table td:first-child {
+.retro-pastel-table th:first-child,
+.retro-pastel-table td:first-child {
   position: sticky;
   left: 0;
   background-color: #f2f2f2;
   z-index: 2;
 }
 
-.pastel-table-container {
+.retro-pastel-table-container {
   max-height: 500px;
   overflow-y: auto;
   overflow-x: scroll;
@@ -38,8 +38,8 @@
   overflow-x: scroll;
 }
 
-.pastel-table th,
-.pastel-table td {
+.retro-pastel-table th,
+.retro-pastel-table td {
   border: 1px solid #0a0a0a;
   padding: 8px;
   text-align: center;
@@ -47,12 +47,12 @@
   word-wrap: break-word;
 }
 
-.pastel-table th {
+.retro-pastel-table th {
   background-color: #f2f2f2;
   font-weight: bold;
 }
 
-.pastel-table tr:hover {
+.retro-pastel-table tr:hover {
   background-color: #8dcdea;
 }
 
@@ -140,17 +140,17 @@ th {
 }
 
 @media (max-width: 768px) {
-  .pastel-table {
+  .retro-pastel-table {
     font-size: 14px;
   }
 
-  .pastel-table th,
-  .pastel-table td {
+  .retro-pastel-table th,
+  .retro-pastel-table td {
     padding: 6px;
     white-space: normal;
   }
 
-  .pastel-table-container {
+  .retro-pastel-table-container {
     max-height: none;
     overflow-y: auto;
   }
@@ -160,8 +160,8 @@ th {
   }
 
   .description-column,
-  .pastel-table th:first-child,
-  .pastel-table td:first-child {
+  .retro-pastel-table th:first-child,
+  .retro-pastel-table td:first-child {
     position: sticky;
     left: 0;
     background-color: #f2f2f2;

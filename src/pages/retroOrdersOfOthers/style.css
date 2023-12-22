@@ -1,4 +1,4 @@
-.salgado-container {
+.retro-salgado-container {
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
@@ -6,7 +6,7 @@
   position: relative;
 }
 
-.salgado-table {
+.retro-salgado-table {
   width: 100%;
   font-size: 10px;
   border-collapse: collapse;
@@ -18,8 +18,8 @@
   width: 150px;
 }
 
-.salgado-table th:first-child,
-.salgado-table td:first-child {
+.retro-salgado-table th:first-child,
+.retro-salgado-table td:first-child {
   position: sticky;
   left: 0;
   background-color: #f2f2f2;
@@ -27,12 +27,12 @@
   z-index: 2;
 }
 
-.salgado-table th,
-.salgado-table td {
+.retro-salgado-table th,
+.retro-salgado-table td {
   border: 1px solid #ddd;
 }
 
-.salgado-table-container {
+.retro-salgado-table-container {
   max-height: 500px;
   overflow-y: auto;
   overflow-x: scroll;
@@ -45,12 +45,12 @@
   overflow-x: scroll;
 }
 
-.salgado-table th {
+.retro-salgado-table th {
   background-color: #f2f2f2;
   font-weight: bold;
 }
 
-.salgado-table tr:hover {
+.retro-salgado-table tr:hover {
   background-color: #8dcdea;
 }
 
@@ -107,17 +107,17 @@ table {
 }
 
 @media (max-width: 768px) {
-  .salgado-table {
+  .retro-salgado-table {
     font-size: 14px;
   }
 
-  .salgado-table th,
-  .salgado-table td {
+  .retro-salgado-table th,
+  .retro-salgado-table td {
     padding: 6px;
     white-space: normal;
   }
 
-  .salgado-table-container {
+  .retro-salgado-table-container {
     max-height: none;
     overflow-y: auto;
   }
@@ -127,8 +127,8 @@ table {
   }
 
   .description-column,
-  .salgado-table th:first-child,
-  .salgado-table td:first-child {
+  .retro-salgado-table th:first-child,
+  .retro-salgado-table td:first-child {
     position: sticky;
     left: 0;
     background-color: #f2f2f2;
@@ -136,7 +136,7 @@ table {
     z-index: 2;
   }
 
-  .salgado-container {
+  .retro-salgado-container {
     flex-direction: column;
   }
 

@@ -85,12 +85,12 @@ function ShowOrdersOfPasteis() {
   };
 
   return (
-    <div className="pastel-container">
+    <div className="retro-pastel-container">
       {loadingProducts ? (
         <div className="loading">Carregando produtos...</div>
       ) : (
         <div>
-          <table className="pastel-table">
+          <table className="retro-pastel-table">
             <thead className="sticky-header">
               <tr>
                 <th>Descrição</th>

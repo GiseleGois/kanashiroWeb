@@ -18,8 +18,10 @@
   width: 150px;
 }
 
+.description-column,
 .salgado-table th:first-child,
 .salgado-table td:first-child {
+  position: -webkit-sticky;
   position: sticky;
   left: 0;
   background-color: #f2f2f2;
@@ -129,6 +131,7 @@ table {
   .description-column,
   .salgado-table th:first-child,
   .salgado-table td:first-child {
+    position: -webkit-sticky;
     position: sticky;
     left: 0;
     background-color: #f2f2f2;
